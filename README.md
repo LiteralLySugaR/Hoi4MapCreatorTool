@@ -2,7 +2,7 @@
 This is (not the most) detailed documentation of this tool, explaining how to use it and what does what.
 
 ## 1.0 Main | State Manipulation Tool
-The very first thing you see and the base for everything in there. From here you can go into other manipulation tools like **Province Manipulation Tool** or **History Entry Tool**.
+The very first thing you see and the base for everything in there. From here you can go into other manipulation tools like **Province Manipulation Tool**, **Resources Entry Tool** **History Entry Tool**.
 ### Supported Commands (1.6.1)
 
 > value in \"<>" means optional. (if the value is not "value" this means exact value to type)
@@ -88,3 +88,13 @@ Used by `create` and `transfer` commands and it returns state or list of states 
 ## 1.9 Main | Convert To String Category class
 
 Used by `category` command and it converts Category ID to string value.
+
+## 2.0 State History Entry | History Entry Tool
+The second manipulation tool that is base for every changes in state's history entry.
+### Supported Commands (1.6.1)
+
+- help <entries>
+Same as `help` command anywhere, will show this list without detailed explanations. "entries" is optional (or again, situational) and will show all available entries.
+
+- resourcesentry
+Access **Resources Entry Tool**.
