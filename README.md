@@ -48,7 +48,7 @@ Will clear everything in the console.
 Console App will be closed.
 - create [Name] [provinces]
 
-Create a state with chosen provinces, [Name] is used for localisation entry while the ID is defined by the amount of files inside **history/states/**
+Create a state with chosen provinces, [Name] is used for localisation entry while the ID is defined by the amount of files inside **history/states/** + 1
 Example: create NewState 1 2 3 4 5
 
 ## 1.1 Main | Create Script class
@@ -79,3 +79,18 @@ Used by every commands and has `[StateID]` as an argument and it returns state p
 ## 1.4 Main | Redact State Parameter class
 
 Used by `category` and `manpower` commands to add or edit category or manpower entries.
+## 1.5 Main | Redact State class
+
+Used by `transfer` command and it takes all the chosen provinces from one state(s) to another.
+## 1.6 Main | Create State class
+
+Used by `create` command and it creates new file and using **Create Script class** mentioned in 1.2 Main.
+## 1.7 Main | Get Free State class
+
+Used by `create` command and it search for free state ID by simply checking amount of files inside **history/states/** and adding 1.
+## 1.8 Main | Get Provinces in States class
+
+Used by `create` and `transfer` commands and it returns state or list of states paths in which it found chosen provinces.
+## 1.9 Main | Convert To String Category class
+
+Used by `category` command and it converts Category ID to string value.
