@@ -23,10 +23,7 @@ Third Manilupation Tool only goal which is to perform manipulations with state's
 Set state's category. If value is unknown, ID is out of range or string value is nowhere to be found, will use **Wasteland (id 0)**.
 - historyentry/hisent [stateID]
 
-Second Manipulation Tool which goal is to perform manipulations with state's history entry within state file.
-```
-history = { [right here] }
-```
+Second Manipulation Tool which goal is to perform manipulations with state's history entry within state file. ` history = { [right here] } `
 - provincedefinition/provdef
 
 Fifth Manipulation Tool which goal is to perform manipulations with provinces mainly in `Definition.csv`. Also provides you with unique tool.
@@ -69,10 +66,7 @@ state = {
 ## 1.2 Main | Create Localisation Entry class
 
 This class is used in state creation and is creating a localisation entry.
-This class is very hardcoded and will always try to write in **localisation/english/state_names_l_english.yml**.
-```
-[STATE_ID]:0 "[NewState]"
-```
+This class is very hardcoded and will always try to write in **localisation/english/state_names_l_english.yml**. `[STATE_ID]:0 "[NewState]" `
 ## 1.3 Main | Get State By ID class
 
 Used by every commands and has `[StateID]` as an argument and it returns state path (**history/states/1-ThisState.txt**).
