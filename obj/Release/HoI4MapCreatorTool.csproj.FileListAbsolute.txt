@@ -1,0 +1,6 @@
+G:\Scripting\CS\Hoi4MapCreatorTool\obj\Release\HoI4MapCreatorTool.csproj.CoreCompileInputs.cache
+G:\Scripting\CS\Hoi4MapCreatorTool\bin\Release\HoI4MapCreatorTool.exe.config
+G:\Scripting\CS\Hoi4MapCreatorTool\bin\Release\HoI4MapCreatorTool.exe
+G:\Scripting\CS\Hoi4MapCreatorTool\bin\Release\HoI4MapCreatorTool.pdb
+G:\Scripting\CS\Hoi4MapCreatorTool\obj\Release\HoI4MapCreatorTool.exe
+G:\Scripting\CS\Hoi4MapCreatorTool\obj\Release\HoI4MapCreatorTool.pdb

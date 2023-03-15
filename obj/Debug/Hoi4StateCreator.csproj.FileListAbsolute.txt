@@ -1,0 +1,7 @@
+G:\Scripting\CS\Hoi4StateCreator\bin\Debug\Hoi4StateCreator.exe.config
+G:\Scripting\CS\Hoi4StateCreator\bin\Debug\Hoi4StateCreator.exe
+G:\Scripting\CS\Hoi4StateCreator\bin\Debug\Hoi4StateCreator.pdb
+G:\Scripting\CS\Hoi4StateCreator\obj\Debug\Hoi4StateCreator.csproj.AssemblyReference.cache
+G:\Scripting\CS\Hoi4StateCreator\obj\Debug\Hoi4StateCreator.csproj.CoreCompileInputs.cache
+G:\Scripting\CS\Hoi4StateCreator\obj\Debug\Hoi4StateCreator.exe
+G:\Scripting\CS\Hoi4StateCreator\obj\Debug\Hoi4StateCreator.pdb

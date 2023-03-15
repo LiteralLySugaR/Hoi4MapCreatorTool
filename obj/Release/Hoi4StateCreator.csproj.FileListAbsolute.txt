@@ -1,0 +1,14 @@
+G:\Scripting\CS\Hoi4StateCreator\bin\Release\Hoi4StateCreator.exe.config
+G:\Scripting\CS\Hoi4StateCreator\bin\Release\Hoi4StateCreator.exe
+G:\Scripting\CS\Hoi4StateCreator\bin\Release\Hoi4StateCreator.pdb
+G:\Scripting\CS\Hoi4StateCreator\obj\Release\Hoi4StateCreator.csproj.CoreCompileInputs.cache
+G:\Scripting\CS\Hoi4StateCreator\obj\Release\Hoi4StateCreator.exe
+G:\Scripting\CS\Hoi4StateCreator\obj\Release\Hoi4StateCreator.pdb
+G:\Scripting\CS\Hoi4StateCreator\obj\Release\Hoi4StateCreator.csproj.AssemblyReference.cache
+G:\Scripting\CS\Hoi4MapCreatorTool\bin\Release\Hoi4StateCreator.exe.config
+G:\Scripting\CS\Hoi4MapCreatorTool\bin\Release\Hoi4StateCreator.exe
+G:\Scripting\CS\Hoi4MapCreatorTool\bin\Release\Hoi4StateCreator.pdb
+G:\Scripting\CS\Hoi4MapCreatorTool\obj\Release\Hoi4StateCreator.csproj.AssemblyReference.cache
+G:\Scripting\CS\Hoi4MapCreatorTool\obj\Release\Hoi4StateCreator.csproj.CoreCompileInputs.cache
+G:\Scripting\CS\Hoi4MapCreatorTool\obj\Release\Hoi4StateCreator.exe
+G:\Scripting\CS\Hoi4MapCreatorTool\obj\Release\Hoi4StateCreator.pdb
