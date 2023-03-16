@@ -33,7 +33,7 @@ Shows this list but without explanations of what does what. "categories" argumen
 Small info on the tool: version and author.
 - resourcesentry/resent [stateID]
 
-Third Manilupation Tool only goal which is to perform manipulations with state's resources.
+Fourth Manilupation Tool only goal which is to perform manipulations with state's resources.
 - category [stateID] [value]
 
 Set state's category. If value is unknown, ID is out of range or string value is nowhere to be found, will use **Wasteland (id 0)**.
@@ -52,7 +52,7 @@ Transfer "selected" provinces to the state.
 Example: transfer 1 1 2 3 4 5 (provinces 1 2 3 4 5 will be transfered to state with id 1).
 - usearray [statesIDS]
 
-Fourth Manipulation Tool which goal is to perform manipulations with an array of states history entry at the same time.
+Third Manipulation Tool which goal is to perform manipulations with an array of states history entry at the same time.
 - clear
 
 Will clear everything in the console.
@@ -167,3 +167,16 @@ Used only by `create` command and it creates a history entry if there is none, o
 ## 2.5 State History Entry | Check History Entry class
 
 Used only by `check` command and it check for existance of history entry inside state's file. Returns **true** or **false**.
+
+# 3.0 Use Array | History Entry for Multiple States Tool
+Third Manipulation Tool or rather part 2 of second Tool. Allows to perform most manipulations from **State History Entry** but for multiple states at once.
+Uses same classes as **State History Entry**.
+### Supported Commands (1.6.1)
+It uses the same Commands as in **State History Entry** with `victory_points` and `resourcesentry/resent` excluded and one new command:
+
+- showarray
+
+Will show every states files you selected.
+
+# 4.0 Resources Entry | Resources Entry Tool
+Fourth Manipulation Tool that allows you to change resources entry. Can be accessed both from **Main** or **State History Entry**.
