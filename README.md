@@ -12,6 +12,22 @@ The very first thing you see and the base for everything in there. From here you
 - help \<categories>
 
 Shows this list but without explanations of what does what. "categories" argument is optional (or better say situational) and will show every available state categories and their IDs.
+
+`categories` output:
+```
+0 - wasteland
+1 - enclave
+2 - tiny_island
+3 - pastoral
+4 - small_island
+5 - rural
+6 - town
+7 - large_town
+8 - city
+9 - large_city
+10 - metropolis
+11 - megapolis
+```
 - about
 
 Small info on the tool: version and author.
@@ -94,7 +110,41 @@ The second manipulation tool that is base for every changes in state's history e
 ### Supported Commands (1.6.1)
 
 - help <entries>
+
 Same as `help` command anywhere, will show this list without detailed explanations. "entries" is optional (or again, situational) and will show all available entries.
 
+`entries` output:
+```
+- victory_points [province] [value]
+- owner [countryTAG]
+- add_core_of [countryTAG]
+- add_claim_by [countryTAG]
+- set_demilitarized_zone [yes/no]
+```
 - resourcesentry
+
 Access **Resources Entry Tool**.
+- end
+
+Console App will be closed.
+- clear
+
+Will clear everything in the console.
+- create
+
+Will create a history entry in state's file. Will never create if there is already one.
+- check
+
+Will check for history entry, returns true or false.
+- setowner [countryTAG]
+
+Set state's owner.
+- add [entry] [value]
+
+Add an entry. If there is already same entry with same value it will create another.
+- remove [entry] <EntryValue>
+
+Will remove an entry with **EntryValue**, otherwise it will remove all entries of that kind.
+- return
+
+Will return to Main.
