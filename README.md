@@ -241,3 +241,16 @@ resources = {
 ## 4.5 Resources Entry | Check Resources Entry class
 
 Used only by `check` command and it check if there is resources entry. Returns `true` or `false`.
+# 5.0 Province Definition | Province Manipulation Tool
+Fifth Manipulation Tool that alows you to perform manipulations with provinces.
+
+At the moment (1.6.1) you can only use one command related to that tool.
+### Supported Commands
+
+- help \<createLandType/clt>
+
+`help` command at this point i think doesnt need to be presented. "createLandType/clt" is optional but required to understand what this command does.
+
+`createLandType/clt` output:
+
+This command requires province map (map/provinces.bmp), a Terrain Input File path and output file name. Optional you can set starting pixel to check from and last pixel position to check \(\"-\" BETWEEN X AND Y IS REQUIRED), otherwise it will take longer to check since it will check EACH pixel. The Output file will ALWAYS be created as a .txt file.
