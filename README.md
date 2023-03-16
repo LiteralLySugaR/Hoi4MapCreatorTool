@@ -3,7 +3,7 @@ This is (not the most) detailed documentation of this tool, explaining how to us
 
 # 1.0 Main | State Manipulation Tool
 The very first thing you see and the base for everything in there. From here you can go into other manipulation tools like **Province Manipulation Tool**, **Resources Entry Tool** **History Entry Tool**.
-### Supported Commands (1.6.1)
+### Supported Commands
 
 > value in \"<>" means optional. (if the value is not "value" this means exact value to type)
 
@@ -107,7 +107,7 @@ Used by `category` command and it converts Category ID to string value.
 
 # 2.0 State History Entry | History Entry Tool
 The second manipulation tool that is base for every changes in state's history entry.
-### Supported Commands (1.6.1)
+### Supported Commands
 
 - help \<entries>
 
@@ -171,7 +171,7 @@ Used only by `check` command and it check for existance of history entry inside 
 # 3.0 Use Array | History Entry for Multiple States Tool
 Third Manipulation Tool or rather part 2 of second Tool. Allows to perform most manipulations from **State History Entry** but for multiple states at once.
 Uses same classes as **State History Entry**.
-### Supported Commands (1.6.1)
+### Supported Commands
 It uses the same Commands as in **State History Entry** with `victory_points` and `resourcesentry/resent` excluded and one new command:
 
 - showarray
@@ -180,3 +180,64 @@ Will show every states files you selected.
 
 # 4.0 Resources Entry | Resources Entry Tool
 Fourth Manipulation Tool that allows you to change resources entry. Can be accessed both from **Main** or **State History Entry**.
+### Supported Commands
+
+- help \<resources>
+
+Same as `help` command anywhere, will show this list without detailed explanations. "resources" is optional (or, again, situational) and will show all available resources.
+
+`resources` output:
+```
+0 - aluminium
+1 - chromium
+2 - oil
+3 - rubber
+4 - tungsten
+5 - steel
+```
+- edit [entry] [value]
+
+Will edit `entry` replacing old value with `value`.
+- end
+
+Console App will be closed.
+- clear
+
+Will clear the console.
+- create
+
+Will create new resources entry.
+- check
+
+Checks if there is a resource entry, returns `true` or `false`.
+- add [entry] [value]
+
+Will add resource entry with value. `[entry] = [value]`.
+- remove [entry]
+
+Will remove entry if it exists.
+- return
+
+Will return to **State History Entry**.
+- returnmain
+
+Will return to **Main**.
+## 4.1 Resources Entry | Resources Edit Entry class
+
+Used only by `edit` command and it edit the entry with a new value.
+## 4.2 Resources Entry | Resources Add Entry class
+
+Used only by `add` command and it adds a new entry with the value.
+## 4.3 Resources Entry | Resources Remove Entry class
+
+Used only by `remove` command and it removes the entry.
+## 4.4 Resources Entry | Create Resource Entry class
+
+Used only by `create` command and it creates a new resource entry if there is none.
+```
+resources = {
+}
+```
+## 4.5 Resources Entry | Check Resources Entry class
+
+Used only by `check` command and it check if there is resources entry. Returns `true` or `false`.
