@@ -254,3 +254,11 @@ At the moment (1.6.1) you can only use one command related to that tool.
 `createLandType/clt` output:
 
 This command requires province map (map/provinces.bmp), a Terrain Input File path and output file name. Optional you can set starting pixel to check from and last pixel position to check \(\"-\" BETWEEN X AND Y IS REQUIRED), otherwise it will take longer to check since it will check EACH pixel. The Output file will ALWAYS be created as a .txt file.
+
+## 5.1 Province Definition | Rules
+
+Terrain Input file can be any extension until its an image. (.bmp .png .jpg .jpeg ...).
+
+Terrain Input should have a specific color pallet:
+![PDTIcolors](https://user-images.githubusercontent.com/75783315/225561734-6158b916-bd8c-4ca2-8d86-0227d4539830.png)
+
