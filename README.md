@@ -265,6 +265,9 @@ Console App will be closed.
 - return
 
 Will return to **Main**.
+- colorsyntax
+
+Will return a table of province types for Terrain Input and their colours (HEX and RGB)
 - createLandType/clt [TerrainInput] [outputFileName] <MinX-MinY> <MaxX-MaxY>
 
 Change every land province entry according to the Terrain Input.
