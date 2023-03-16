@@ -109,7 +109,7 @@ Used by `category` command and it converts Category ID to string value.
 The second manipulation tool that is base for every changes in state's history entry.
 ### Supported Commands (1.6.1)
 
-- help <entries>
+- help \<entries>
 
 Same as `help` command anywhere, will show this list without detailed explanations. "entries" is optional (or again, situational) and will show all available entries.
 
