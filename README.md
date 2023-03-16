@@ -260,6 +260,7 @@ This command requires province map (map/provinces.bmp), a Terrain Input File pat
 Terrain Input file can be any extension until its an image. (.bmp .png .jpg .jpeg ...).
 
 Terrain Input should have a specific color pallet:
-![PDTIcolors](https://user-images.githubusercontent.com/75783315/225563813-7c4111b5-199a-4cc6-95ca-70f15938d753.png)
+
+![PDTIcolors](https://user-images.githubusercontent.com/75783315/225564146-a900ff13-9d27-4db2-8ff1-460d71d1fb3b.png)
 
 
