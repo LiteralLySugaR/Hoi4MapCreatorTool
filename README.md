@@ -148,3 +148,22 @@ Will remove an entry with **EntryValue**, otherwise it will remove all entries o
 - return
 
 Will return to Main.
+## 2.1 State History Entry | State Add Entry class
+
+Exists in two variations: One requires variables (string state, string entry, string value) while second requires (string state, string entry, string[] value), used only by `add` command, first and second value are **state** and **entry** while the last is the value(s) for the entry. Since **victory_points** entry has 2 values (provinceID and value), its used inside the `StateAddEntry(string, string, string[])`.
+## 2.2 State History Entry | State Remove Entry class
+
+Exists in two variations: One requires variables (string state, string entry) while second (string state, string entry, string value), used only by `remove` command and first one removes every entries of that kind while the second removes entry only with the same value.
+## 2.3 State History Entry | State Set Owner class
+
+Used only by `setowner` command and checks for the `owner` entry and change its value, otherwise create new entry.
+## 2.4 State History Entry | Create History Entry class
+
+Used only by `create` command and it creates a history entry if there is none, otherwise it wont.
+```
+  history = {
+  }
+```
+## 2.5 State History Entry | Check History Entry class
+
+Used only by `check` command and it check for existance of history entry inside state's file. Returns **true** or **false**.
