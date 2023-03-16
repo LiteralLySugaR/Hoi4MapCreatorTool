@@ -101,6 +101,8 @@ Used by `create` command and it search for free state ID by simply checking amou
 ## 1.8 Main | Get Provinces in States class
 
 Used by `create` and `transfer` commands and it returns state or list of states paths in which it found chosen provinces.
+
+The more provinces are chosen the longer it will take to perform that operation. Usually it takes about 2 seconds per province.
 ## 1.9 Main | Convert To String Category class
 
 Used by `category` command and it converts Category ID to string value.
@@ -292,6 +294,8 @@ Main class for changing `Definition.csv` and exists in 3 variants:
 
 It compares colours on Terrain Input with provinces, it reads the province only when the same pixel colour on Terrain Input is not water.
 Once the province was found not in water colour, it saves XY position of the pixel, its RGB colour, Type to set and its ID.
+
+Usually it takes 1-2 minutes to perform that operation.
 ## 5.3 Province Definition | Replace Province Type Entry class
 
 Last step of creating entries to-copy-in `Definition.csv` and it replaces entries according to the information given from **ReadPixelFromProvinces** inside a new file.
