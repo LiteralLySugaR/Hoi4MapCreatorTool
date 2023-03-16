@@ -7,7 +7,7 @@ This is (not the most) detailed documentation of this tool, explaining how to us
 - Resources Entry[^4]
 - Province Definition[^5]
 
-#[^1]: 1.0 Main | State Manipulation Tool
+# [^1]: 1.0 Main | State Manipulation Tool
 The very first thing you see and the base for everything in there. From here you can go into other manipulation tools like **Province Manipulation Tool**, **Resources Entry Tool** **History Entry Tool**.
 ### Supported Commands
 
