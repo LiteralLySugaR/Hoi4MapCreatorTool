@@ -734,6 +734,7 @@ namespace HoI4MapCreatorTool
                     " - clear\n" +
                     " - end\n" +
                     " - return\n" +
+                    " - colorsyntax\n" +
                     " - createLandType/clt [TerrainInput] [outputFileName] <MinX-MinY> <MaxX-MaxY> (example: map/TerrainInput2.bmp newDefinition 338-565 2724-1587)");
                 }
                 else
@@ -743,6 +744,31 @@ namespace HoI4MapCreatorTool
                         Console.WriteLine("This command requires province map (map/provinces.bmp), a Terrain Input File path and output file name. Optional you can set starting pixel to check from and last pixel position to check (\"-\" BETWEEN X AND Y IS REQUIRED), otherwise it will take longer to check since it will check EACH pixel. The Output file will ALWAYS be created as a .txt file.");
                     }
                 }
+            }
+            if (args[0].Equals("colorsyntax"))
+            {
+                Console.WriteLine("Color Syntax Table (for Terrain Input image)\n" +
+                "________________________________________\n" +
+                "   TYPE   |   HEX  |     RGB     |\n" +
+                "________________________________________\n" +
+                "  WATER   | 0000FF |   0 0 255   |\n" +
+                "\n" +
+                "  PLAINS  | FF8142 |  255 129 66 |\n" +
+                "\n" +
+                "  HILLS   | F8FF99 | 248 255 153 |\n" +
+                "\n" +
+                " MOUNTAIN | 9DC0D0 | 157 192 208 |\n" +
+                "\n" +
+                "  URBAN   | 787878 | 120 120 120 |\n" +
+                "\n" +
+                "  MARSH   | 4C6023 |  76 96 35   |\n" +
+                "\n" +
+                "  DESERT  | FF7F00 |  255 127 0  |\n" +
+                "\n" +
+                "  FOREST  | 59C755 |  89 199 85  |\n" +
+                "\n" +
+                "  JUNGLE  | 7FBF00 |  127 191 0  |\n" +
+                "________________________________________");
             }
             if (args[0].Equals("createLandType") || args[0].Equals("clt"))
             {
@@ -1042,14 +1068,15 @@ namespace HoI4MapCreatorTool
         }
         public class ColorTypes
         {
-            public Color PlainsColor = Color.FromArgb(255, 129, 66);
-            public Color HillssColor = Color.FromArgb(248, 255, 153);
-            public Color MountainColor = Color.FromArgb(157, 192, 208);
-            public Color UrbanColor = Color.FromArgb(120, 120, 120);
-            public Color MarshColor = Color.FromArgb(76, 96, 35);
-            public Color DesertColor = Color.FromArgb(255, 127, 0);
-            public Color ForestColor = Color.FromArgb(89, 199, 85);
-            public Color JungleColor = Color.FromArgb(127, 191, 0);
+            //Water #0000FF
+            public Color PlainsColor = Color.FromArgb(255, 129, 66); // #FF8142
+            public Color HillssColor = Color.FromArgb(248, 255, 153); // #F8FF99
+            public Color MountainColor = Color.FromArgb(157, 192, 208); // #9DC0D0
+            public Color UrbanColor = Color.FromArgb(120, 120, 120); // #787878
+            public Color MarshColor = Color.FromArgb(76, 96, 35); // #4C6023
+            public Color DesertColor = Color.FromArgb(255, 127, 0); // #FF7F00
+            public Color ForestColor = Color.FromArgb(89, 199, 85); // #59C755
+            public Color JungleColor = Color.FromArgb(127, 191, 0); // #7FBF00
         }
         public class PixelInfo
         {
