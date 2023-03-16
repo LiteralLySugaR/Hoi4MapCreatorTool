@@ -255,7 +255,7 @@ At the moment (1.6.1) you can only use one command related to that tool.
 
 This command requires province map (map/provinces.bmp), a Terrain Input File path and output file name. Optional you can set starting pixel to check from and last pixel position to check \(\"-\" BETWEEN X AND Y IS REQUIRED), otherwise it will take longer to check since it will check EACH pixel. The Output file will ALWAYS be created as a .txt file.
 
-## 5.1 Province Definition | Rules
+## 5.1 Province Definition | Terrain Input
 
 Terrain Input file can be any extension until its an image. (.bmp .png .jpg .jpeg ...).
 
@@ -269,3 +269,24 @@ And using provinces.bmp in photoshop put it below Terrain Input and (with it sel
 
 When done, save the Terrain Input inside your mod folder.
 
+## 5.2 Province Definition | Read Pixel From Provinces class
+
+Main class for changing `Definition.csv` and exists in 3 variants:
+- ReadPixelFromProvinces(string TerrainInputFile)
+- ReadPixelFromProvinces(string TerrainInputFile, string MinXY, string MaxXY)
+- ReadPixelFromProvinces(string TerrainInputFile, string MinXY)
+
+It compares colours on Terrain Input with provinces, it reads the province only when the same pixel colour on Terrain Input is not water.
+Once the province was found not in water colour, it saves XY position of the pixel, its RGB colour, Type to set and its ID.
+## 5.3 Province Definition | Replace Province Type Entry class
+
+Last step of creating entries to-copy-in `Definition.csv` and it replaces entries according to the information given from **ReadPixelFromProvinces** inside a new file.
+## 5.4 Province Definition | Find Province Id By Color class
+
+Used by **ReadPixelFromProvinces** and it finds province ID in `Definition.csv` by given colour.
+## 5.5 Province Definition | Get Color From String RGB class
+
+Converts (for example) "255 0 127" into Color.
+## 5.6 Province Definition | Convert Color To Type class
+
+Converts Color to Province Type. Will return "plains" if nothing else matched.
