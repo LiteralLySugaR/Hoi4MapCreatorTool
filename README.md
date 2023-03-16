@@ -259,8 +259,13 @@ This command requires province map (map/provinces.bmp), a Terrain Input File pat
 
 Terrain Input file can be any extension until its an image. (.bmp .png .jpg .jpeg ...).
 
-Terrain Input should have a specific color pallet:
+Terrain Input should have a specific colour pallet:
 
-![PDTIcolors](https://user-images.githubusercontent.com/75783315/225564146-a900ff13-9d27-4db2-8ff1-460d71d1fb3b.png)
+![colours](https://user-images.githubusercontent.com/75783315/225564146-a900ff13-9d27-4db2-8ff1-460d71d1fb3b.png)
 
+And using provinces.bmp in photoshop put it below Terrain Input and (with it selected) start selecting province that you want to change category for, using paint bucket tool change colour of the selected areas on Terrain Input repeat for every categories you want to add/change and you'll have something like this (Used my Tsushima Map for TsushimaWars mod):
+
+![Terrain Input](https://user-images.githubusercontent.com/75783315/225566269-c045ccde-14aa-4f16-beae-b5e2875b9f28.png)
+
+When done, save the Terrain Input inside your mod folder.
 
