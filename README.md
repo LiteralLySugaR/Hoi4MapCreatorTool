@@ -254,6 +254,20 @@ At the moment (1.6.1) you can only use one command related to that tool.
 `createLandType/clt` output:
 
 This command requires province map (map/provinces.bmp), a Terrain Input File path and output file name. Optional you can set starting pixel to check from and last pixel position to check \(\"-\" BETWEEN X AND Y IS REQUIRED), otherwise it will take longer to check since it will check EACH pixel. The Output file will ALWAYS be created as a .txt file.
+- clear
+
+This will clear the console.
+- end
+
+Console App will be closed.
+- return
+
+Will return to **Main**.
+- createLandType/clt [TerrainInput] [outputFileName] <MinX-MinY> <MaxX-MaxY>
+
+Change every land province entry according to the Terrain Input.
+
+Example: `clt map/MyTerrainInput.bmp MyDefinition 210-200 500-500`
 
 ## 5.1 Province Definition | Terrain Input
 
