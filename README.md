@@ -273,7 +273,7 @@ Example: `clt map/MyTerrainInput.bmp MyDefinition 210-200 500-500`
 
 ## 5.1 Province Definition | Terrain Input
 
-Terrain Input file can be any extension until its an image. (.bmp .png .jpg .jpeg ...).
+Terrain Input file can be any extension as long as its an image. (.bmp .png .jpg .jpeg ...).
 
 Terrain Input should have a specific colour pallet:
 
