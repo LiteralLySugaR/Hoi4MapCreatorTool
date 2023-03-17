@@ -9,7 +9,7 @@ namespace HoI4MapCreatorTool
 {
     class Program
     {
-        public static string Version = "1.6.1";
+        public static string Version = "1.6.2";
         public static List<string> Entries = new List<string>
         {
             "add_core_of",
@@ -735,6 +735,8 @@ namespace HoI4MapCreatorTool
                     " - end\n" +
                     " - return\n" +
                     " - colorsyntax\n" +
+                    " - tohex [R-G-B]\n" +
+                    " - create [DefinitionFile] [R-G-B/HEX] [ProvinceType] [isCoastal] <continentType>\n" +
                     " - createLandType/clt [TerrainInput] [outputFileName] <MinX-MinY> <MaxX-MaxY> (example: map/TerrainInput2.bmp newDefinition 338-565 2724-1587)");
                 }
                 else
@@ -743,6 +745,38 @@ namespace HoI4MapCreatorTool
                     {
                         Console.WriteLine("This command requires province map (map/provinces.bmp), a Terrain Input File path and output file name. Optional you can set starting pixel to check from and last pixel position to check (\"-\" BETWEEN X AND Y IS REQUIRED), otherwise it will take longer to check since it will check EACH pixel. The Output file will ALWAYS be created as a .txt file.");
                     }
+                }
+            }
+            if (args[0].Equals("tohex") && args.Length >= 2)
+            {
+                string hex = StringRGBtoHex(args[1].Split('-'));
+                Console.WriteLine($"[ProvinceDefinition] Hex: {hex}");
+            }
+            if (args[0].Equals("create"))
+            {
+                string[] ColourRGB = new string[3];
+                if (args.Length > 4)
+                {
+                    if (args[2].Contains("-"))
+                    {
+                        ColourRGB = args[2].Split('-');
+                    }
+                    else
+                    {
+                        ColourRGB = HexToStringRGB(args[2]);
+                    }
+                }
+                if (args.Length == 5)
+                {
+                    CreateProvinceDefEntry(args[1], ColourRGB, "land", args[3], args[4], "1");
+                }
+                else if (args.Length > 5)
+                {
+                    CreateProvinceDefEntry(args[1], ColourRGB, "land", args[3], args[4], args[5]);
+                }
+                else
+                {
+                    Console.WriteLine($"[ProvinceDefinition] Command has {args.Length} arguments while 5 required!");
                 }
             }
             if (args[0].Equals("colorsyntax"))
@@ -839,7 +873,57 @@ namespace HoI4MapCreatorTool
             Console.WriteLine(" ");
             ProvinceDefinition();
         }
-        static List<PixelInfo> ReadPixelFromProvinces(string PathTerrainInput)
+        public static string[] HexToStringRGB(string Hex)
+        {
+            string h1 = $"{Hex.ToCharArray()[0]}{Hex.ToCharArray()[1]}";
+            string h2 = $"{Hex.ToCharArray()[2]}{Hex.ToCharArray()[3]}";
+            string h3 = $"{Hex.ToCharArray()[4]}{Hex.ToCharArray()[5]}";
+            h1 = Convert.ToInt32(h1, 16).ToString();
+            h2 = Convert.ToInt32(h2, 16).ToString();
+            h3 = Convert.ToInt32(h3, 16).ToString();
+            string[] RGB = new string[] { h1, h2, h3 };
+            return RGB;
+        }
+        public static string StringRGBtoHex(string[] RGB)
+        {
+            string Hex = $"{DecimalToHexadecimal(Convert.ToInt32(RGB[0]))}{DecimalToHexadecimal(Convert.ToInt32(RGB[1]))}{DecimalToHexadecimal(Convert.ToInt32(RGB[2]))}";
+            return Hex;
+
+        }
+        private static string DecimalToHexadecimal(int integer)
+        {
+            if (integer <= 9 && integer > 0) { return $"0{integer}"; }
+            else if (integer <= 0) { return "00"; }
+            int hex = integer;
+            string hexStr = string.Empty;
+
+            while (integer > 0)
+            {
+                hex = integer % 16;
+
+                if (hex < 10)
+                    hexStr = hexStr.Insert(0, Convert.ToChar(hex + 48).ToString());
+                else
+                    hexStr = hexStr.Insert(0, Convert.ToChar(hex + 55).ToString());
+
+                integer /= 16;
+            }
+
+            return hexStr;
+        }
+        public static void CreateProvinceDefEntry(string DefinitionPath, string[] RGB, string TerrainType, string ProvinceType, string isCoastal, string continent)
+        {
+            string[] AllLines = File.ReadAllLines(DefinitionPath);
+            AllLines = AllLines.Where(s => !string.IsNullOrEmpty(s)).ToArray();
+            string lastLine = AllLines[AllLines.Length - 1];
+            string ID = (Convert.ToInt32(lastLine.Split(';')[0]) + 1).ToString();
+            string newLine = $"{ID};{RGB[0]};{RGB[1]};{RGB[2]};{TerrainType};{isCoastal};{ProvinceType};{continent}";
+
+            AllLines[AllLines.Length - 1] = $"{AllLines[AllLines.Length - 1]}\n{newLine}";
+            File.WriteAllLines(DefinitionPath, AllLines);
+            Console.WriteLine($"[CreateProvinceDefEntry] Created new entry {newLine} in {DefinitionPath}");
+        }
+        public static List<PixelInfo> ReadPixelFromProvinces(string PathTerrainInput)
         {
             Bitmap TerrainInput = new Bitmap(PathTerrainInput);
             Bitmap provinceMap = new Bitmap(@"map\provinces.bmp");
@@ -881,7 +965,7 @@ namespace HoI4MapCreatorTool
             }
             return ProvPixelInfo;
         }
-        static List<PixelInfo> ReadPixelFromProvinces(string PathTerrainInput, string MinXY, string MaxXY)
+        public static List<PixelInfo> ReadPixelFromProvinces(string PathTerrainInput, string MinXY, string MaxXY)
         {
             Bitmap TerrainInput = new Bitmap(PathTerrainInput);
             Bitmap provinceMap = new Bitmap(@"map\provinces.bmp");
@@ -928,7 +1012,7 @@ namespace HoI4MapCreatorTool
             }
             return ProvPixelInfo;
         }
-        static List<PixelInfo> ReadPixelFromProvinces(string PathTerrainInput, string MinXY)
+        public static List<PixelInfo> ReadPixelFromProvinces(string PathTerrainInput, string MinXY)
         {
             Bitmap TerrainInput = new Bitmap(PathTerrainInput);
             Bitmap provinceMap = new Bitmap(@"map\provinces.bmp");
@@ -1689,7 +1773,7 @@ namespace HoI4MapCreatorTool
             "oil",
             "rubber",
             "tungsten",
-            "steel",
+            "steel"
         };
     }
 }
