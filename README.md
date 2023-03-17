@@ -268,6 +268,12 @@ Will return to **Main**.
 - colorsyntax
 
 Will return a table of province types for Terrain Input and their colours (HEX and RGB)
+- tohex [R-G-B]
+
+Will convert R-G-B values to Hex. `tohex 255-127-0`.
+- create [DefinitionFile] [R-G-B/HEX] [ProvinceType] [isCoastal] <continentType>
+
+Will create a new province entry in `[DefinitionFile]` with all the data. (works only for `land` terrain type).
 - createLandType/clt [TerrainInput] [outputFileName] <MinX-MinY> <MaxX-MaxY>
 
 Change every land province entry according to the Terrain Input.
@@ -311,3 +317,20 @@ Converts (for example) "255 0 127" into Color.
 ## 5.6 Province Definition | Convert Color To Type class
 
 Converts Color to Province Type. Will return "plains" if nothing else matched.
+## 5.7 Province Definition | Hex To String RGB class
+
+Converts Hexadecimal (`#FF7F00`) to colour as a string[] (`255, 127, 0`).
+## 5.8 Province Definition | String RGB to Hex class
+
+Converts string[] RGB (`255, 127, 0`) to Hexadecimal (`#FF7F00`).
+## 5.9 Province Definition | Decimal To Hexadecimal class
+
+Main class to convert RGB integers to Hexadecimal.
+## 5.10 Province Definition | Create Province Def Entry class
+
+Create a new entry for a province. ID is defined by amount of non-empty lines + 1 while other value are defined in `create` command.
+
+Entry
+```
+[ID];[R];[G];[B];land;[isCoastal];[ProvinceType];[ContinentID]
+```
