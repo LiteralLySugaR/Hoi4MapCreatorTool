@@ -271,9 +271,11 @@ Will return a table of province types for Terrain Input and their colours (HEX a
 - tohex [R-G-B]
 
 Will convert R-G-B values to Hex. `tohex 255-127-0`.
-- create [DefinitionFile] [R-G-B/HEX] [ProvinceType] [isCoastal] <continentType>
+- create [DefinitionFile] [R-G-B/HEX] [ProvinceType] [isCoastal] \<continentID>
 
 Will create a new province entry in `[DefinitionFile]` with all the data. (works only for `land` terrain type).
+
+Example: `create map/definition.csv 255-127-0 urban false 1`
 - createLandType/clt [TerrainInput] [outputFileName] <MinX-MinY> <MaxX-MaxY>
 
 Change every land province entry according to the Terrain Input.
