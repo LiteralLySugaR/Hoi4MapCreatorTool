@@ -9,7 +9,7 @@ namespace HoI4MapCreatorTool
 {
     class Program
     {
-        public static string Version = "1.6.2";
+        public static string Version = "1.6.3-PreRelease";
         public static List<string> Entries = new List<string>
         {
             "add_core_of",
@@ -19,6 +19,7 @@ namespace HoI4MapCreatorTool
             "add_claim_by"
         };
         public static int menuType = 0;
+        public static List<Color> ProvinceColours = new List<Color>();
         static void ResourcesEntry(string state)
         {
             if (menuType != 4)
@@ -736,6 +737,7 @@ namespace HoI4MapCreatorTool
                     " - return\n" +
                     " - colorsyntax\n" +
                     " - tohex [R-G-B]\n" +
+                    " - generateRGB\n" +
                     " - create [DefinitionFile] [R-G-B/HEX] [ProvinceType] [isCoastal] <continentType>\n" +
                     " - createLandType/clt [TerrainInput] [outputFileName] <MinX-MinY> <MaxX-MaxY> (example: map/TerrainInput2.bmp newDefinition 338-565 2724-1587)");
                 }
@@ -854,6 +856,10 @@ namespace HoI4MapCreatorTool
                 {
                     Console.WriteLine($"[ProvinceDefinition] Syntax Error! 3 arguments are required.");
                 }
+            }
+            if (args[0].Equals("generateRGB"))
+            {
+                Console.WriteLine($"[GenerateRGB] {GenerateRGB()}");
             }
             if (args[0].Equals("end"))
             {
@@ -1170,12 +1176,47 @@ namespace HoI4MapCreatorTool
             public string Type;
             public int ID;
         }
+        public static string GenerateRGB()
+        {
+            string toReturn;
+            Random R1 = new Random();
+            byte R = (byte)R1.Next(0, 255);
+            byte G = (byte)R1.Next(0, 255);
+            byte B = (byte)R1.Next(0, 255);
+            if (ProvinceColours.Contains(GetColorFromStringRGB($"{R} {G} {B}")))
+            {
+                toReturn = GenerateRGB();
+            }
+            else
+            {
+                toReturn = $"{R} {G} {B}";
+            }
+            return toReturn;
+        }
+        public static void UpdateProvinceColours()
+        {
+            string definition = @"map\definition.csv";
+            string[] lines = File.ReadAllLines(definition);
+            foreach (string str in lines)
+            {
+                string[] localStr = str.Split(';');
+                Color localRGB = GetColorFromStringRGB($"{localStr[1]} {localStr[2]} {localStr[3]}");
+                if (!ProvinceColours.Contains(localRGB))
+                {
+                    ProvinceColours.Add(localRGB);
+                }
+            }
+        }
         static void Main()
         {
             while (true)
             {
                 try
                 {
+                    if (ProvinceColours.Count < 1)
+                    {
+                        UpdateProvinceColours();
+                    }
                     if (menuType != 1)
                     {
                         Console.WriteLine($"===== MAIN | STATES MANIPULATION TOOL (v{Version} by July) =====");
