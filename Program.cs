@@ -9,7 +9,7 @@ namespace HoI4MapCreatorTool
 {
     class Program
     {
-        public static string Version = "1.6.3-PreRelease";
+        public static string Version = "1.6.3";
         public static List<string> Entries = new List<string>
         {
             "add_core_of",
@@ -18,6 +18,12 @@ namespace HoI4MapCreatorTool
             "set_demilitarized_zone",
             "add_claim_by"
         };
+        public class StateInfo
+        {
+            public string File;
+            public string[] Provinces;
+        }
+        public static List<StateInfo> StatesInfo = new List<StateInfo>();
         public static int menuType = 0;
         public static List<Color> ProvinceColours = new List<Color>();
         static void ResourcesEntry(string state)
@@ -1199,11 +1205,35 @@ namespace HoI4MapCreatorTool
             string[] lines = File.ReadAllLines(definition);
             foreach (string str in lines)
             {
-                string[] localStr = str.Split(';');
-                Color localRGB = GetColorFromStringRGB($"{localStr[1]} {localStr[2]} {localStr[3]}");
-                if (!ProvinceColours.Contains(localRGB))
+                if (str.Contains(";") && !str.Contains("#"))
                 {
-                    ProvinceColours.Add(localRGB);
+                    string[] localStr = str.Split(';');
+                    Color localRGB = GetColorFromStringRGB($"{localStr[1]} {localStr[2]} {localStr[3]}");
+                    if (!ProvinceColours.Contains(localRGB))
+                    {
+                        ProvinceColours.Add(localRGB);
+                    }
+                }
+            }
+        }
+        public static void UpdateStatesProvinces()
+        {
+            string[] Files = Directory.GetFiles("history\\states\\");
+            foreach (string file in Files)
+            {
+                string[] lines = File.ReadAllLines(file);
+                foreach (string str in lines)
+                {
+                    if (str.Contains("provinces"))
+                    {
+                        string str1 = lines[lines.ToList().IndexOf(str) + 1];
+
+                        str1 = str1.Replace("	", string.Empty);
+
+                        string[] provs = str1.Split(' ').Where(s => !string.IsNullOrEmpty(s)).ToArray();
+                        StatesInfo.Add(new StateInfo { File = file, Provinces = provs });
+                        break;
+                    }
                 }
             }
         }
@@ -1216,6 +1246,7 @@ namespace HoI4MapCreatorTool
                     if (ProvinceColours.Count < 1)
                     {
                         UpdateProvinceColours();
+                        UpdateStatesProvinces();
                     }
                     if (menuType != 1)
                     {
@@ -1277,17 +1308,33 @@ namespace HoI4MapCreatorTool
                         {
                             Console.WriteLine("Available commands:\n" +
                             " - help <categories>\n" +
+                            "    > Will display this list. If second argument specified (categories) it will show all vanilla categories names and ids.\n\n" +
                             " - about\n" +
+                            "    > About this app.\n\n" +
                             " - resourcesentry/resent [stateID]\n" +
+                            "    > Go in state's resource entry editor tab.\n\n" +
                             " - category [stateID] [value]\n" +
+                            "    > Set state's category. Support both name and id argument as value.\n\n" +
                             " - historyentry/hisent [stateID]\n" +
+                            "    > Go in state's history entry editor tab.\n\n" +
                             " - provincedefinition/provdef\n" +
+                            "    > Go in province definition editor tab.\n\n" +
                             " - manpower [stateID] [value]\n" +
+                            "    > Set/change state's manpower.\n\n" +
                             " - transfer [stateID] [provinces]\n" +
+                            "    > Transfer all written provinces to the state. Support array from 1 to 2.147.483.647 (basically infinite) of provinces.\n\n" +
                             " - usearray [statesIDS]\n" +
+                            "    > Will open alternate to this menu that allows to edit multiple states at once.\n\n" +
                             " - clear\n" +
+                            "    > Clear the mess this app and you wrote here.\n\n" +
                             " - end\n" +
-                            " - create [Name] [provinces]");
+                            "    > Close the app.\n\n" +
+                            " - create [Name] [provinces]" +
+                            "    > Create a state. [Name] will be used in localisation that should be located at localisation\\english\\state_names_l_english.yml. " +
+                            "Basically, if your states loc is situated lets say in my_parents_love_me_l_english.yml then it wont work.\n\n" +
+                            " - merge [targetStateID(s)/all] [StateToMergeIn]" +
+                            "    > Merge selected states. Left into right. Typing \"all\" as first argument wont require second since all states will be merged into the state with the smallest id. " +
+                            "[StateToMergeIn] should always be last in the list, the most right.\n");
                         }
                         else
                         {
@@ -1377,13 +1424,101 @@ namespace HoI4MapCreatorTool
                         Console.WriteLine($"[Main] Successfully created state!");
                         Thread.Sleep(4000);
                     }
+                    if (args[0].Equals("merge") && args.Length >= 2)
+                    {
+                        string[] states = args;
+                        states.ToList().Remove(args[0]);
+                        string toMerge = states.Last();
+                        states.ToList().Remove(toMerge);
+                        states.Where(s => !string.IsNullOrEmpty(s)).ToArray();
+
+                        if (!args[1].Equals("all") && states.Length >= 2) { TransferStatesProvs(states, toMerge, false); }
+                        else if (args[1].Equals("all")) { TransferStatesProvs(states, "1", true); }
+                    }
                     Thread.Sleep(1000);
                     Console.WriteLine(" ");
                     Main();
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine($"[Main-Error] {e}");
+                    Console.WriteLine($"[Main-Error] {e.Message}\n[SOURCE] {e.Source}\n");
+                }
+            }
+        }
+        static void TransferStatesProvs(string[] AllStates, string ToMergeState, bool AllInOne)
+        {
+            List<string> Provinces = new List<string>();
+            string[] files = Directory.GetFiles(@"history\states\");
+            string MergeFile = "";
+            foreach (string file in files.ToArray())
+            {
+                Console.WriteLine($"[TransferStatesProvs] Working with {file} . . .");
+                string MfileName = file.Split('\\').Last();
+                string MstateID = MfileName.Split('-')[0];
+                if (ToMergeState == MstateID) 
+                {
+                    MergeFile = file;
+                    foreach (StateInfo Si in StatesInfo)
+                    {
+                        if (Si.File.Equals(file))
+                        {
+                            Console.WriteLine($"[TransferStatesProvs] Found Merge file.");
+                            Provinces.AddRange(Si.Provinces);
+                            break;
+                        }
+                    }
+                }
+
+                if (AllInOne && ToMergeState != file.Split('\\').Last().Split('-')[0])
+                {
+                    string fileName = file.Split('\\').Last();
+                    if (!fileName.StartsWith("1-"))
+                    {
+                        foreach (StateInfo Si in StatesInfo)
+                        {
+                            if (Si.File.Equals(file))
+                            {
+                                Console.WriteLine($"[TransferStatesProvs] Found selected state (ID:{file.Split('\\').Last().Split('-')[0]})");
+                                Provinces.AddRange(Si.Provinces);
+                                File.Delete(file);
+                                break;
+                            }
+                        }
+                    }
+                }
+                else if (!AllInOne && ToMergeState != file.Split('\\').Last().Split('-')[0])
+                {
+                    string fileName = file.Split('\\').Last();
+                    string stateID = fileName.Split('-')[0];
+                    if (AllStates.ToList().Contains(stateID))
+                    {
+                        foreach (StateInfo Si in StatesInfo)
+                        {
+                            if (Si.File.Equals(file))
+                            {
+                                Console.WriteLine($"[TransferStatesProvs] Found selected state (ID:{stateID})");
+                                Provinces.AddRange(Si.Provinces);
+                                File.Delete(file);
+                                break;
+                            }
+                        }
+                    }
+                }
+
+            }
+            //string line = $"	provinces = {{\n		{string.Join(" ", Provinces)}\n	}}";
+            if (!string.IsNullOrEmpty(MergeFile))
+            {
+                string[] lines = File.ReadAllLines(MergeFile);
+                foreach (string str in lines.ToArray())
+                {
+                    if (str.Contains("provinces"))
+                    {
+                        Console.WriteLine($"[TransferStatesProvs] Writing lines in {MergeFile.Split('\\').Last()}");
+                        lines[lines.ToList().IndexOf(str) + 1] = $"		{string.Join(" ", Provinces)}";
+                        File.WriteAllLines(MergeFile, lines);
+                        break;
+                    }
                 }
             }
         }
@@ -1407,10 +1542,19 @@ namespace HoI4MapCreatorTool
         {
             string locPath = @"localisation\english\state_names_l_english.yml";
 
-            StreamWriter sw = new StreamWriter(locPath, true);
-            sw.WriteLine($"{StateName}:0 \"{LocName}\"");
-            sw.Flush();
-            sw.Close();
+            //StreamWriter sw = new StreamWriter(locPath, true);
+            string[] Lines = File.ReadAllLines(locPath).Where(s => !string.IsNullOrEmpty(s)).ToArray();
+
+            string toAdd = "";
+            if (Lines.Last().StartsWith(" ")) { toAdd += " "; }
+            toAdd += $"{StateName}:0 \"{LocName}\"";
+
+            Lines.ToList().Add(toAdd);
+            File.WriteAllLines(locPath, Lines);
+
+            //sw.WriteLine($"\n {StateName}:0 \"{LocName}\"");
+            //sw.Flush();
+            //sw.Close();
             //File.WriteAllLines(locPath, lines);
 
             Console.WriteLine($"[CreateLocalisationEntry] Created new Entry for {StateName} \"{LocName}\"");
