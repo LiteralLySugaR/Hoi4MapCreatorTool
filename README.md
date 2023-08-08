@@ -63,6 +63,9 @@ Console App will be closed.
 
 Create a state with chosen provinces, [Name] is used for localisation entry while the ID is defined by the amount of files inside **history/states/** + 1
 Example: create NewState 1 2 3 4 5
+- merge [State(s)/all] [TargetState]
+
+Merge provinces from left array of state to the most right (target) state. Typing 'all' as first argument will make [TargetState] unnecessary since all states will be merged into state with id 1.
 
 ## 1.1 Main | Create Script class
 
