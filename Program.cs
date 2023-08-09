@@ -9,7 +9,7 @@ namespace HoI4MapCreatorTool
 {
     class Program
     {
-        public static string Version = "1.6.3";
+        public static string Version = "1.6.4";
         public static List<string> Entries = new List<string>
         {
             "add_core_of",
@@ -1237,6 +1237,142 @@ namespace HoI4MapCreatorTool
                 }
             }
         }
+        static void StrategicRegionMain()
+        {
+            if (menuType != 6)
+            {
+                Console.WriteLine($"===== STRATEGIC REGIONS MANIPULATION TOOL =====");
+                menuType = 6;
+            }
+            Console.Write("Action: ");
+            string[] args = Console.ReadLine().Split(' ');
+
+            if (args[0].Equals("help"))
+            {
+                Console.WriteLine("Available commands:\n" +
+                            " - help\n" +
+                            "    > Will display this list.\n\n" +
+                            " - transfer [Provinces] [StratRegionID]\n" +
+                            "    > Transfer all written provinces to the strategic region. If no other regions contains written provinces it will simply add them, otherwise remove from other regions.\n" +
+                            "    > At least two arguments required.\n\n" +
+                            " - transfer state [StatesID] [StratRegionID]\n" +
+                            "    > Transfer all states provinces to the strategic region. If no other regions contains written provinces it will simply add them, otherwise remove from other regions.\n\n" +
+                            " - clear\n" +
+                            "    > Clear the mess this app and you wrote here.\n\n" +
+                            " - end\n" +
+                            "    > Close the app.\n");
+            }
+            if (args[0].Equals("transfer"))
+            {
+                if (args.Length >= 3 && !args.Contains("state"))
+                {
+                    //map\\strategicregions\\
+                    List<string> provs = args.ToList();
+                    string targetStratRegion = args.Last();
+                    provs.Remove(args[0]);
+                    provs.Remove(args.Last());
+                    provs.TrimExcess();
+
+                    ChangeStratRegion(provs, targetStratRegion);
+                }
+                else if (args.Length >= 4 && args.Contains("state"))
+                {
+                    //map\\strategicregions\\
+                    List<string> states = args.ToList();
+                    string targetStratRegion = args.Last();
+                    states.Remove(args[0]);
+                    states.Remove(args.Last());
+                    states.TrimExcess();
+
+                    List<string> Provs = new List<string>();
+                    foreach (StateInfo Si in StatesInfo)
+                    {
+                        foreach (string state in states)
+                        {
+                            if (Si.File.Split('\\').Last().Split('-')[0].Equals(state))
+                            {
+                                Provs.AddRange(Si.Provinces);
+                                break;
+                            }
+                        }
+                    }
+                    ChangeStratRegion(Provs, targetStratRegion);
+                }
+            }
+            if (args[0].Equals("clear"))
+            {
+                Console.Clear();
+                menuType = 0;
+            }
+            if (args[0].Equals("return"))
+            {
+                Main();
+            }
+            if (args[0].Equals("end"))
+            {
+                Environment.Exit(0);
+            }
+            Thread.Sleep(1000);
+            Console.WriteLine(" ");
+            StrategicRegionMain();
+        }
+        public static void ChangeStratRegion(List<string> Provinces, string StrategicRegionID)
+        {
+            string[] Files = Directory.GetFiles("map\\strategicregions\\");
+            List<string> provsTransfer = new List<string>();
+            string TargetFile = "";
+            foreach (string file in Files)
+            {
+                Console.WriteLine($"[ChangeStratRegion] Working with {file} . . .");
+                if (file.Split('\\').Last().Split('-')[0].Equals(StrategicRegionID))
+                {
+                    Console.WriteLine($"[ChangeStratRegion] Target file found.");
+                    TargetFile = file;
+                }
+                else
+                {
+                    string[] lines = File.ReadAllLines(file);
+                    foreach (string line in lines.ToArray())
+                    {
+                        if (line.Contains("provinces"))
+                        {
+                            string str1 = lines[lines.ToList().IndexOf(line) + 1];
+                            str1 = str1.Replace("	", string.Empty);
+                            string[] str2 = str1.Split(' ');
+                            foreach (string str in str2)
+                            {
+                                if (Provinces.Contains(str))
+                                {
+                                    Console.WriteLine($"[ChangeStratRegion] Spotted written province in {file.Split('\\').Last()}, writting changes. . .");
+                                    provsTransfer.Add(str);
+                                    string[] allLines = File.ReadAllLines(file);
+                                    allLines[allLines.ToList().IndexOf(line) + 1] = allLines[allLines.ToList().IndexOf(line) + 1].Replace($" {str}", string.Empty);
+                                    File.WriteAllLines(file, allLines);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            foreach (string line in File.ReadAllLines(TargetFile).ToArray())
+            {
+                if (line.Contains("provinces"))
+                {
+                    Console.WriteLine($"[ChangeStratRegion] Writing Changes in {TargetFile} . . .");
+                    string[] allLines = File.ReadAllLines(TargetFile);
+                    string targetLine = allLines[allLines.ToList().IndexOf(line) + 1];
+
+                    if (targetLine.EndsWith(" "))
+                    {
+                        allLines[allLines.ToList().IndexOf(line) + 1] += $"{string.Join(" ", Provinces)}";
+                    }
+                    else { allLines[allLines.ToList().IndexOf(line) + 1] += $" {string.Join(" ", Provinces)}"; }
+
+                    File.WriteAllLines(TargetFile, allLines);
+                    break;
+                }
+            }
+        }
         static void Main()
         {
             while (true)
@@ -1260,6 +1396,11 @@ namespace HoI4MapCreatorTool
                     {
                         Console.Clear();
                         ProvinceDefinition();
+                    }
+                    if (args[0].Equals("strategicregion") || args[0].Equals("sr") || args[0].Equals("stratregion"))
+                    {
+                        Console.Clear();
+                        StrategicRegionMain();
                     }
                     if (args[0].Equals("usearray"))
                     {
@@ -1332,6 +1473,8 @@ namespace HoI4MapCreatorTool
                             " - create [Name] [provinces]" +
                             "    > Create a state. [Name] will be used in localisation that should be located at localisation\\english\\state_names_l_english.yml. " +
                             "Basically, if your states loc is situated lets say in my_parents_love_me_l_english.yml then it wont work.\n\n" +
+                            " - strategicregion\\sr\\stratregion\n" +
+                            "    > Go in Strategic Region editor tab.\n\n" +
                             " - merge [targetStateID(s)/all] [StateToMergeIn]" +
                             "    > Merge selected states. Left into right. Typing \"all\" as first argument wont require second since all states will be merged into the state with the smallest id. " +
                             "[StateToMergeIn] should always be last in the list, the most right.\n");
