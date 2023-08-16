@@ -9,7 +9,7 @@ namespace HoI4MapCreatorTool
 {
     class Program
     {
-        public static string Version = "1.6.4";
+        public static string Version = "1.6.5";
         public static List<string> Entries = new List<string>
         {
             "add_core_of",
@@ -1462,6 +1462,8 @@ namespace HoI4MapCreatorTool
                             "    > Go in province definition editor tab.\n\n" +
                             " - manpower [stateID] [value]\n" +
                             "    > Set/change state's manpower.\n\n" +
+                            " - manpower percent [stateIDtoTakeFrom] [stateID] [valuePercent]\n" +
+                            "    > Set/change state's manpower using percentage from first state to second. NOTE: first state has to have at least some manpower in order to work.\n\n" +
                             " - transfer [stateID] [provinces]\n" +
                             "    > Transfer all written provinces to the state. Support array from 1 to 2.147.483.647 (basically infinite) of provinces.\n\n" +
                             " - usearray [statesIDS]\n" +
@@ -1470,12 +1472,12 @@ namespace HoI4MapCreatorTool
                             "    > Clear the mess this app and you wrote here.\n\n" +
                             " - end\n" +
                             "    > Close the app.\n\n" +
-                            " - create [Name] [provinces]" +
+                            " - create [Name] [provinces]\n" +
                             "    > Create a state. [Name] will be used in localisation that should be located at localisation\\english\\state_names_l_english.yml. " +
                             "Basically, if your states loc is situated lets say in my_parents_love_me_l_english.yml then it wont work.\n\n" +
                             " - strategicregion\\sr\\stratregion\n" +
                             "    > Go in Strategic Region editor tab.\n\n" +
-                            " - merge [targetStateID(s)/all] [StateToMergeIn]" +
+                            " - merge [targetStateID(s)/all] [StateToMergeIn]\n" +
                             "    > Merge selected states. Left into right. Typing \"all\" as first argument wont require second since all states will be merged into the state with the smallest id. " +
                             "[StateToMergeIn] should always be last in the list, the most right.\n");
                         }
@@ -1519,11 +1521,38 @@ namespace HoI4MapCreatorTool
                     }
                     if (args[0].Equals("manpower"))
                     {
-                        string state = GetStateByID(Convert.ToInt32(args[1]));
-                        int value = Convert.ToInt32(args[2]);
+                        if (args.Length == 3)
+                        {
+                            string state = GetStateByID(Convert.ToInt32(args[1]));
+                            int value = Convert.ToInt32(args[2]);
 
-                        RedactStateParameter(state, value, args[0]);
-                        Console.WriteLine($"[Main] Changed Value Successfully!");
+                            RedactStateParameter(state, value, args[0]);
+                            Console.WriteLine($"[Main] Changed Value Successfully!");
+                        }
+                        else if (args.Length > 3 && args[1].Equals("percent"))
+                        {
+                            string FromStateFile = GetStateByID(Convert.ToInt32(args[2]));
+                            string ToStateFile = GetStateByID(Convert.ToInt32(args[3]));
+
+                            float percent = (float)Convert.ToDouble(args[4]);
+                            string numFromFile = null;
+                            string[] FromLines = File.ReadAllLines(@"history\states\" + FromStateFile);
+
+                            foreach (string line in FromLines)
+                            {
+                                if (line.Contains(args[0]))
+                                {
+                                    numFromFile = line.Split('=')[1];
+                                    break;
+                                }
+                            }
+
+                            int value = (int)((Convert.ToInt32(numFromFile) / 100) * (100 - percent));
+                            RedactStateParameter(FromStateFile, value, args[0]);
+
+                            value = (int)((Convert.ToInt32(numFromFile) / 100) * percent);
+                            RedactStateParameter(ToStateFile, value, args[0]);
+                        }
                     }
                     if (args[0].Equals("transfer"))
                     {
@@ -1584,7 +1613,7 @@ namespace HoI4MapCreatorTool
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine($"[Main-Error] {e.Message}\n[SOURCE] {e.Source}\n");
+                    Console.WriteLine($"[Main-Error] {e.Message}\n[SOURCE] {e.Source}\n\n{e}\n");
                 }
             }
         }
@@ -1689,10 +1718,16 @@ namespace HoI4MapCreatorTool
             string[] Lines = File.ReadAllLines(locPath).Where(s => !string.IsNullOrEmpty(s)).ToArray();
 
             string toAdd = "";
-            if (Lines.Last().StartsWith(" ")) { toAdd += " "; }
             toAdd += $"{StateName}:0 \"{LocName}\"";
 
-            Lines.ToList().Add(toAdd);
+            if (!string.IsNullOrEmpty(Lines[Lines.ToList().IndexOf(Lines.Last())]))
+            {
+                Lines[Lines.ToList().IndexOf(Lines.Last())] += $"\n{toAdd}";
+            }
+            else
+            {
+                Lines[Lines.ToList().IndexOf(Lines.Last())] += $" {toAdd}\n";
+            }
             File.WriteAllLines(locPath, Lines);
 
             //sw.WriteLine($"\n {StateName}:0 \"{LocName}\"");
@@ -1722,6 +1757,29 @@ namespace HoI4MapCreatorTool
             }
             return str1;
         }
+        static void RedactStateParameter(string state, float percent, string param)
+        {
+            string path = @"history\states\" + state;
+
+            Console.WriteLine("[RedactStateParameter] Changing Entries");
+            foreach (string str in File.ReadAllLines(path))
+            {
+                int index = File.ReadAllLines(path).ToList().IndexOf(str);
+
+                if (str.Contains(param) && str.Contains("="))
+                {
+                    string[] str2 = str.Split('=');
+                    string str3 = str2[str2.Length - 1];
+                    str3.Trim();
+                    int value = (int)((Convert.ToInt32(str3) / 100) * percent);
+                    string str4 = str.Replace(str3, " " + value.ToString());
+                    string[] str5 = File.ReadAllLines(path);
+                    str5[index] = str4;
+                    File.WriteAllLines(path, str5);
+                    Console.WriteLine($"[RedactStateParameter] Found an replaced {param} value from {str3} to {value}");
+                }
+            }
+        }
         static void RedactStateParameter(string state, int value, string param)
         {
             bool valueChanged = false;
@@ -1735,30 +1793,17 @@ namespace HoI4MapCreatorTool
                 int index = File.ReadAllLines(path).ToList().IndexOf(str);
 
                 b++;
-                if (str.Contains(param))
+                if (str.Contains(param) && str.Contains("="))
                 {
-                    if (str.Contains(" = "))
-                    {
-                        string[] str2 = str.Split(' ');
-                        string str3 = str2[str2.Length - 1];
-                        string str4 = str.Replace(str3, value.ToString());
-                        string[] str5 = File.ReadAllLines(path);
-                        str5[index] = str4;
-                        File.WriteAllLines(path, str5);
-                        valueChanged = true;
-                        Console.WriteLine($"[RedactStateParameter] Found an replaced {param} value from {str3} to {value}");
-                    }
-                    else
-                    {
-                        string[] str2 = str.Split('=');
-                        string str3 = str2[str2.Length - 1];
-                        string str4 = str.Replace(str3, value.ToString());
-                        string[] str5 = File.ReadAllLines(path);
-                        str5[index] = str4;
-                        File.WriteAllLines(path, str5);
-                        valueChanged = true;
-                        Console.WriteLine($"[RedactStateParameter] Found an replaced {param} value from {str3} to {value}");
-                    }
+                    string[] str2 = str.Split('=');
+                    string str3 = str2[str2.Length - 1];
+                    str3.Trim();
+                    string str4 = str.Replace(str3, " " + value.ToString());
+                    string[] str5 = File.ReadAllLines(path);
+                    str5[index] = str4;
+                    File.WriteAllLines(path, str5);
+                    valueChanged = true;
+                    Console.WriteLine($"[RedactStateParameter] Found an replaced {param} value from {str3} to {value}");
                 }
                 if (!str.Contains(param) && b == a && !valueChanged)
                 {
@@ -1794,30 +1839,17 @@ namespace HoI4MapCreatorTool
                 int index = File.ReadAllLines(path).ToList().IndexOf(str);
 
                 b++;
-                if (str.Contains(param))
+                if (str.Contains(param) && str.Contains("="))
                 {
-                    if (str.Contains(" = "))
-                    {
-                        string[] str2 = str.Split(' ');
-                        string str3 = str2[str2.Length - 1];
-                        string str4 = str.Replace(str3, value.ToString());
-                        string[] str5 = File.ReadAllLines(path);
-                        str5[index] = str4;
-                        File.WriteAllLines(path, str5);
-                        valueChanged = true;
-                        Console.WriteLine($"[RedactStateParameter] Found an replaced {param} value from {str3} to {value}");
-                    }
-                    else
-                    {
-                        string[] str2 = str.Split('=');
-                        string str3 = str2[str2.Length - 1];
-                        string str4 = str.Replace(str3, value.ToString());
-                        string[] str5 = File.ReadAllLines(path);
-                        str5[index] = str4;
-                        File.WriteAllLines(path, str5);
-                        valueChanged = true;
-                        Console.WriteLine($"[RedactStateParameter] Found an replaced {param} value from {str3} to {value}");
-                    }
+                    string[] str2 = str.Split('=');
+                    string str3 = str2[str2.Length - 1];
+                    str3.Trim();
+                    string str4 = str.Replace(str3, " " + value.ToString());
+                    string[] str5 = File.ReadAllLines(path);
+                    str5[index] = str4;
+                    File.WriteAllLines(path, str5);
+                    valueChanged = true;
+                    Console.WriteLine($"[RedactStateParameter] Found an replaced {param} value from {str3} to {value}");
                 }
                 if (!str.Contains(param) && b == a && !valueChanged)
                 {
