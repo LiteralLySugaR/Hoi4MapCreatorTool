@@ -1306,6 +1306,7 @@ namespace HoI4MapCreatorTool
             }
             if (args[0].Equals("return"))
             {
+                Console.Clear();
                 Main();
             }
             if (args[0].Equals("end"))
