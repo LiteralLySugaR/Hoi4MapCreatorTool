@@ -9,7 +9,7 @@ namespace HoI4MapCreatorTool
 {
     class Program
     {
-        public static string Version = "1.6.5";
+        public static string Version = "1.6.6";
         public static List<string> Entries = new List<string>
         {
             "add_core_of",
@@ -1537,7 +1537,9 @@ namespace HoI4MapCreatorTool
 
                             float percent = (float)Convert.ToDouble(args[4]);
                             string numFromFile = null;
+                            string numToFile = null;
                             string[] FromLines = File.ReadAllLines(@"history\states\" + FromStateFile);
+                            string[] ToLines = File.ReadAllLines(@"history\states\" + ToStateFile);
 
                             foreach (string line in FromLines)
                             {
@@ -1547,11 +1549,19 @@ namespace HoI4MapCreatorTool
                                     break;
                                 }
                             }
+                            foreach (string line in ToLines)
+                            {
+                                if (line.Contains(args[0]))
+                                {
+                                    numToFile = line.Split('=')[1];
+                                    break;
+                                }
+                            }
 
                             int value = (int)((Convert.ToInt32(numFromFile) / 100) * (100 - percent));
                             RedactStateParameter(FromStateFile, value, args[0]);
 
-                            value = (int)((Convert.ToInt32(numFromFile) / 100) * percent);
+                            value = (int)(Convert.ToInt32(numToFile) + ((Convert.ToInt32(numFromFile) / 100) * percent));
                             RedactStateParameter(ToStateFile, value, args[0]);
                         }
                     }
