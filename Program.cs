@@ -40,7 +40,27 @@ namespace HoI4MapCreatorTool
             {
                 if (args.Length == 1)
                 {
-                    Console.WriteLine("Available commands:\n - help <resources>\n - edit [entry] [value]\n - end\n - clear\n - create\n - check\n - add [entry] [value]\n - remove [entry]\n - return\n - returnmain\n");
+                    Console.WriteLine("Available commands:\n" +
+                        " - help <resources>\n" +
+                        "    > Will display this list.\n\n" +
+                        " - edit [entry] [value]\n" +
+                        "    > Edit existing entry.\n\n" +
+                        " - end\n" +
+                        "    > Close the app.\n\n" +
+                        " - clear\n" +
+                        "    > Clear the mess you and this app have done.\n\n" +
+                        " - create\n" +
+                        "    > Create a resource entry.\n\n" +
+                        " - check\n" +
+                        "    > Check for existing resource entry.\n\n" +
+                        " - add [entry] [value]\n" +
+                        "    > Add an entry.\n\n" +
+                        " - remove [entry]\n" +
+                        "    > Remove an entry.\n\n" +
+                        " - return\n" +
+                        "    > Return to previous page.\n\n" +
+                        " - returnmain\n" +
+                        "    > Return to main page.\n");
                 }
                 else
                 {
@@ -253,7 +273,27 @@ namespace HoI4MapCreatorTool
             {
                 if (args.Length == 1)
                 {
-                    Console.WriteLine("Available commands:\n - help <entries>\n - resourcesentry\n - end\n - clear\n - create\n - check\n - setowner [countryTAG]\n - add [entry] [value]\n - remove [entry] <EntryValue> (leave EntryValue empty to remove all entries of defined type)\n - return\n");
+                    Console.WriteLine("Available commands:\n" +
+                        " - help <entries>\n" +
+                        "    > Will display this list.\n\n" +
+                        " - resourcesentry\n" +
+                        "    > Go to resource entry page.\n\n" +
+                        " - end\n" +
+                        "    > Will close this app.\n\n" +
+                        " - clear\n" +
+                        "    > Will clear the mess you and this app have done.\n\n" +
+                        " - create\n" +
+                        "    > Create an entry.\n\n" +
+                        " - check\n" +
+                        "    > Check for existing entry.\n\n" +
+                        " - setowner [countryTAG]\n" +
+                        "    > Set state's owner.\n\n" +
+                        " - add [entry] [value]\n" +
+                        "    > Add an entry.\n\n" +
+                        " - remove [entry] <EntryValue>\n" +
+                        "    > Remove an entry. Leave EntryValue empty to remove all entries of defined type.\n\n" +
+                        " - return\n" +
+                        "    > Return to previous page.\n");
                 }
                 else
                 {
@@ -576,7 +616,31 @@ namespace HoI4MapCreatorTool
             {
                 if (args.Length == 1)
                 {
-                    Console.WriteLine("Available commands:\n - help <entries>\n - resourcesentry\n - showarray\n - clear\n - create\n - check\n - end\n - remove [stateID]\n - setowner [countryTAG]\n - add [entry] [value]\n - remove [entry] <EntryValue> (leave EntryValue empty to remove all entries of defined type)\n - return\n");
+                    Console.WriteLine("Available commands:\n" +
+                        " - help <entries>\n" +
+                        "    > Will display this list.\n\n" +
+                        " - resourcesentry\n" +
+                        "    > Go to resource entry page.\n\n" +
+                        " - showarray\n" +
+                        "    > Show selected states.\n\n" +
+                        " - clear\n" +
+                        "    > Clear the mess you and this app have done.\n\n" +
+                        " - create\n" +
+                        "    > Create an entry.\n\n" +
+                        " - check\n" +
+                        "    > Check for existing entry.\n\n" +
+                        " - end\n" +
+                        "    > Will close this app.\n\n" +
+                        " - remove [stateID]\n" +
+                        "    > Remove a state from the array.\n\n" +
+                        " - setowner [countryTAG]\n" +
+                        "    > Set state's owner.\n\n" +
+                        " - add [entry] [value]\n" +
+                        "    > Add an entry.\n\n" +
+                        " - remove [entry] <EntryValue>\n" +
+                        "    > Remove an entry. Leave EntryValue empty to remove all entries of defined type.\n\n" +
+                        " - return\n" +
+                        "    > Return to previous page.\n");
                 }
                 else
                 {
@@ -738,14 +802,23 @@ namespace HoI4MapCreatorTool
                 {
                     Console.WriteLine("Available commands:\n" +
                     " - help <createLandType/clt>\n" +
+                    "    > Will display this list.\n\n" +
                     " - clear\n" +
+                    "    > Will clear the mess you and this app have done.\n\n" +
                     " - end\n" +
+                    "    > Will close this app.\n\n" +
                     " - return\n" +
+                    "    > Return to previous page.\n\n" +
                     " - colorsyntax\n" +
+                    "    > Show list of colours to use when making terrain input.\n\n" +
                     " - tohex [R-G-B]\n" +
+                    "    > Convert RGB colour to HEX.\n\n" +
                     " - generateRGB\n" +
+                    "    > Generate an RGB colour that is not used in definition.csv.\n\n" +
                     " - create [DefinitionFile] [R-G-B/HEX] [ProvinceType] [isCoastal] <continentType>\n" +
-                    " - createLandType/clt [TerrainInput] [outputFileName] <MinX-MinY> <MaxX-MaxY> (example: map/TerrainInput2.bmp newDefinition 338-565 2724-1587)");
+                    "    > Create a province.\n\n" +
+                    " - createLandType/clt [TerrainInput] [outputFileName] <MinX-MinY> <MaxX-MaxY>\n" +
+                    "    > Using terrain input sets provinces type for entire map. Min/Max(X/Y) sets the check area in pixels for the tool. Example: map/TerrainInput2.bmp newDefinition 338-565 2724-1587\n");
                 }
                 else
                 {
