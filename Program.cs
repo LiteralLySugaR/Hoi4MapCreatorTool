@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 
 namespace HoI4MapCreatorTool
 {
     class Program
     {
-        public static string Version = "1.6.6";
+        public static string Version = "1.6.7";
         public static List<string> Entries = new List<string>
         {
             "add_core_of",
@@ -26,6 +27,210 @@ namespace HoI4MapCreatorTool
         public static List<StateInfo> StatesInfo = new List<StateInfo>();
         public static int menuType = 0;
         public static List<Color> ProvinceColours = new List<Color>();
+
+        //public class StateData
+        //{
+        //    public string Name;
+        //    public int ID;
+        //    public Color Colour;
+        //}
+        //public static List<Color> StateColours = new List<Color>();
+        //public static List<StateData> StatesDef = new List<StateData>();
+        //
+        //static void StateDefinition()
+        //{
+        //    if (StateColours.Count == 0)
+        //    {
+        //        StateColours.Add(GetColorFromStringRGB("0 0 0"));
+        //        StateColours.Add(GetColorFromStringRGB("16 16 176"));
+        //    }
+        //    if (menuType != 7)
+        //    {
+        //        Console.WriteLine($"===== STATE DEFINITION | STATE MANIPULATION TOOL =====");
+        //        menuType = 7;
+        //    }
+        //    Console.Write("StateDefinition: ");
+        //    string[] args = Console.ReadLine().Split(' ');
+        //
+        //    if (args[0].Equals("help"))
+        //    {
+        //        Console.WriteLine("Available commands:\n" +
+        //                " - help\n" +
+        //                "    > Will display this list.\n\n" +
+        //                " - create\n" +
+        //                "    > create state definition based on history\\states.\n\n" +
+        //                " - generateRGB\n" +
+        //                "    > generate an RGB colour that is not used in [StateDefinitionFile].\n\n" +
+        //                " - read [StateDefinitionFile]\n" +
+        //                "    > Based on [StateDefinitionFile] will update history\\states\\ files by creating new states if doesnt exist here but does in Definition file and updating other states Existing states will be untouched if they exist in the Definition and no provinces were changed.\n\n" +
+        //                " - end\n" +
+        //                "    > Close the app.\n\n" +
+        //                " - clear\n" +
+        //                "    > Clear the mess you and this app have done.\n\n" +
+        //                " - return\n" +
+        //                "    > Return to previous page.\n");
+        //    }
+        //    if (args[0].Equals("create"))
+        //    {
+        //        Console.WriteLine($"[StateDefinition] Commencing Operation, this may take up to 10 minutes . . .");
+        //        Thread.Sleep(3000);
+        //        CreateStateDefinition();
+        //    }
+        //    if (args[0].Equals("clear"))
+        //    {
+        //        Console.Clear();
+        //        menuType = 0;
+        //    }
+        //    if (args[0].Equals("return"))
+        //    {
+        //        Console.Clear();
+        //        Main();
+        //    }
+        //    if (args[0].Equals("end"))
+        //    {
+        //        Environment.Exit(0);
+        //    }
+        //    Thread.Sleep(1000);
+        //    Console.WriteLine(" ");
+        //    StateDefinition();
+        //}
+        //public class PixelData
+        //{
+        //    public int X;
+        //    public int Y;
+        //    public Color Colour;
+        //}
+        //public static List<PixelData> Pixels = new List<PixelData>();
+        //static void WritePixelsToList(Bitmap bitmap)
+        //{
+        //    int x = 0;
+        //    int y = 0;
+        //    Pixels.Clear();
+        //    while (x < bitmap.Width - 1 || y < bitmap.Height - 1)
+        //    {
+        //        Pixels.Add(new PixelData() { X = x, Y = y, Colour = bitmap.GetPixel(x, y) });
+        //
+        //        if (x < bitmap.Width - 1) { x++; }
+        //        else if (x == bitmap.Width - 1 && y < bitmap.Height - 1) { x = 0; y++; }
+        //    }
+        //
+        //    //Last pixel
+        //    Pixels.Add(new PixelData() { X = bitmap.Width - 1, Y = bitmap.Height - 1, Colour = bitmap.GetPixel(bitmap.Width - 1, bitmap.Height - 1) });
+        //}
+        //[DllImport("gdiplus.dll", CharSet = CharSet.Unicode, SetLastError = true, ExactSpelling = true)]
+        //internal static extern int GdipBitmapGetPixel(HandleRef bitmap, int x, int y, out int argb);
+        //static void CreateStateDefinition()
+        //{
+        //    List<Color> ReplaceColours = new List<Color>();
+        //    List<Color> ReplaceColoursWater = new List<Color>();
+        //
+        //    Console.WriteLine($"[CreateStateDefinition] Reading map\\provinces.bmp . . .");
+        //    Bitmap BMP1 = new Bitmap(@"map\provinces.bmp");
+        //    Graphics BMP = Graphics.FromImage(BMP1);
+        //    WritePixelsToList(BMP1);
+        //
+        //    Console.WriteLine($"[CreateStateDefinition] Reading states . . .");
+        //    string[] Files = Directory.GetFiles("history\\states\\");
+        //    foreach (string file in Files)
+        //    {
+        //        Console.WriteLine($"[CreateStateDefinition] Reading {file}");
+        //        string[] lines = File.ReadAllLines(file);
+        //        foreach (string line in lines)
+        //        {
+        //            if (line.Contains("provinces"))
+        //            {
+        //                string str1 = lines[lines.ToList().IndexOf(line) + 1];
+        //                str1 = str1.Replace("	", string.Empty);
+        //                string[] provs = str1.Split(' ');
+        //                //Console.WriteLine($"[CreateStateDefinition] {file.Split('\\').Last()} : \n\"{str1}\"");
+        //                foreach (string str in File.ReadAllLines(@"map\definition.csv"))
+        //                {
+        //                    if (str.Contains("sea") && !str.StartsWith("0"))
+        //                    {
+        //                        string[] str2 = str.Split(';');
+        //                        ReplaceColoursWater.Add(GetColorFromStringRGB($"{str2[1]} {str2[2]} {str2[3]}"));
+        //                        Console.WriteLine($"[CreateStateDefinition] Found sea province {str2[0]}");
+        //                    }
+        //                    else if (str.Contains("land") && !str.StartsWith("0"))
+        //                    {
+        //                        foreach (string prov in provs)
+        //                        {
+        //                            if (str.StartsWith(prov))
+        //                            {
+        //                                string[] str2 = str.Split(';');
+        //                                ReplaceColours.Add(GetColorFromStringRGB($"{str2[1]} {str2[2]} {str2[3]}"));
+        //                                Console.WriteLine($"[CreateStateDefinition] Found state province ({str2[0]}) in {file.Split('\\').Last()}");
+        //                                break;
+        //                            }
+        //                        }
+        //                    }
+        //                }
+        //                Color StateColour = GetColorFromStringRGB(GenerateRGBState());
+        //                Console.WriteLine($"[CreateStateDefinition] State #{file.Split('\\').Last().Split('-')[0]} assigned colour {GetStringRGBFromColor(StateColour)}");
+        //
+        //                int x = 0;
+        //                int y = 0;
+        //                while (x < BMP.Width && y < BMP.Height)
+        //                {
+        //                    if (ReplaceColours.Contains(BMP.GetPixel(x, y)))
+        //                    {
+        //                        BMP.SetPixel(x, y, StateColour);
+        //                    }
+        //                    else if (ReplaceColoursWater.Contains(BMP.GetPixel(x, y)))
+        //                    {
+        //                        BMP.SetPixel(x, y, GetColorFromStringRGB("16 16 176"));
+        //                    }
+        //                    else
+        //                    {
+        //                        BMP.SetPixel(x, y, GetColorFromStringRGB("0 0 0"));
+        //                    }
+        //                
+        //                    if (x >= (BMP.Width - 1)) { x = 0; y++; }
+        //                    else { x++; }
+        //                }
+        //                StatesDef.Add(new StateData { ID = Convert.ToInt32(file.Split('\\').Last().Split('-')[0]), Colour = StateColour, Name = file.Split('-')[1].Split('.')[0] });
+        //            }
+        //        }
+        //    }
+        //    foreach (PixelData PD in Pixels.ToArray())
+        //    {
+        //        if (ReplaceColoursWater.Contains(PD.Colour))
+        //        {
+        //            PD.Colour = GetColorFromStringRGB("16 16 176");
+        //        }
+        //        else
+        //        {
+        //            PD.Colour = GetColorFromStringRGB("0 0 0");
+        //        }
+        //    }
+        //    foreach (PixelData PD in Pixels.ToArray()) { BMP.SetPixel(PD.X, PD.Y, PD.Colour); }
+        //
+        //    BMP.Save("StateDefinitionTG.png");
+        //    List<string> Alllines = new List<string>();
+        //    foreach (StateData SD in StatesDef)
+        //    {
+        //        Alllines.Add($"{SD.ID};{SD.Colour.R};{SD.Colour.G};{SD.Colour.B};{SD.Name}");
+        //    }
+        //    if (!File.Exists("StateDefinition.txt")) { File.Create("StateDefinition.txt").Close(); }
+        //    File.WriteAllLines("StateDefinition.txt", Alllines);
+        //}
+        //public static string GenerateRGBState()
+        //{
+        //    string toReturn;
+        //    Random R1 = new Random();
+        //    byte R = (byte)R1.Next(0, 255);
+        //    byte G = (byte)R1.Next(0, 255);
+        //    byte B = (byte)R1.Next(0, 255);
+        //    if (StateColours.Contains(GetColorFromStringRGB($"{R} {G} {B}")))
+        //    {
+        //        toReturn = GenerateRGBState();
+        //    }
+        //    else
+        //    {
+        //        toReturn = $"{R} {G} {B}";
+        //    }
+        //    return toReturn;
+        //}
         static void ResourcesEntry(string state)
         {
             if (menuType != 4)
@@ -1466,6 +1671,11 @@ namespace HoI4MapCreatorTool
                     Console.Write("State: ");
                     string[] args = Console.ReadLine().Split(' ');
 
+                    //if (args[0].Equals("statedefinition") || args[0].Equals("statedef"))
+                    //{
+                    //    Console.Clear();
+                    //    StateDefinition();
+                    //}
                     if (args[0].Equals("provincedefinition") || args[0].Equals("provdef"))
                     {
                         Console.Clear();
@@ -1515,7 +1725,7 @@ namespace HoI4MapCreatorTool
                     }
                     if (args[0].Equals("about"))
                     {
-                        Console.WriteLine($"Hearts of Iron 4: State Tool\nVersion: {Version}\nBy July");
+                        Console.WriteLine($"Hearts of Iron 4: Map Modding Tool\nVersion: {Version}\nBy July");
                     }
                     if (args[0].Equals("help"))
                     {
@@ -1551,6 +1761,10 @@ namespace HoI4MapCreatorTool
                             "Basically, if your states loc is situated lets say in my_parents_love_me_l_english.yml then it wont work.\n\n" +
                             " - strategicregion\\sr\\stratregion\n" +
                             "    > Go in Strategic Region editor tab.\n\n" +
+                            " - statedefinition/statedef (removed)\n" +
+                            "    > Go in state definition editor tab.\n\n" +
+                            " - givelist , removearray [FileToRemoveFrom]* [FileRemover]* , giveliststate [Exclude/Include/Single]* [RemoveFromDef]\n" +
+                            "    > Arxy's 'Dev Commands', mainly serve no use but debugging provinces.\n\n" +
                             " - merge [targetStateID(s)/all] [StateToMergeIn]\n" +
                             "    > Merge selected states. Left into right. Typing \"all\" as first argument wont require second since all states will be merged into the state with the smallest id. " +
                             "[StateToMergeIn] should always be last in the list, the most right.\n");
@@ -1576,6 +1790,133 @@ namespace HoI4MapCreatorTool
                                 Console.WriteLine($"All state categories: \n{helpcat}");
                             }
                         }
+                    }
+                    if (args[0].Equals("givelist"))
+                    {
+                        string[] lines = File.ReadAllLines(@"map\definition.csv");
+                        string toReturn = "";
+                        string type = args[1];
+                        foreach (string line in lines)
+                        {
+                            if (line.Contains($";{type};"))
+                            {
+                                string provID = line.Split(';')[0];
+                                toReturn += $"{provID} ";
+                            }
+                        }
+                        Console.WriteLine($"[MAIN] returned: {toReturn}");
+                    }
+                    if (args[0].Equals("removearray"))
+                    {
+                        string RemoveFrom = args[1];
+                        string Remover = args[2];
+                        string toReturn = "";
+                        List<string> RemoveA = new List<string>();
+                        RemoveA.AddRange(File.ReadAllLines(RemoveFrom)[0].Split(' '));
+                        List<string> RemoveB = new List<string>();
+                        RemoveB.AddRange(File.ReadAllLines(Remover)[0].Split(' '));
+
+                        foreach (string str in RemoveA.ToArray())
+                        {
+                            if (RemoveB.Contains(str))
+                            {
+                                RemoveA.Remove(str);
+                            }
+                        }
+                        toReturn = string.Join(" ", RemoveA);
+
+                        Console.WriteLine($"[MAIN] returned: {toReturn}");
+                    }
+                    if (args[0].Equals("giveliststate"))
+                    {
+                        string[] files = Directory.GetFiles(@"history\states\");
+                        string toReturn = "";
+                        string State = args[1];
+                        string Type = args[2];
+                        string ProvAction = args[3];
+                        foreach (string file in files)
+                        {
+                            if (Type == "Exclude" && !file.Split('\\').Last().Split('-')[0].Equals(State))
+                            {
+                                foreach (string line in File.ReadAllLines(file))
+                                {
+                                    if (line.Contains("provinces"))
+                                    {
+                                        string str = File.ReadAllLines(file)[File.ReadAllLines(file).ToList().IndexOf(line) + 1];
+                                        str = str.Trim('	'); //codding space
+                                        if (str.EndsWith(" "))
+                                        {
+                                            toReturn += $"{str}";
+                                        }
+                                        else
+                                        {
+                                            toReturn += $"{str} ";
+                                        }
+                                    }
+                                }
+                            }
+                            else if (Type == "Include")
+                            {
+                                foreach (string line in File.ReadAllLines(file))
+                                {
+                                    if (line.Contains("provinces"))
+                                    {
+                                        string str = File.ReadAllLines(file)[File.ReadAllLines(file).ToList().IndexOf(line) + 1];
+                                        str = str.Trim('	'); //codding space
+                                        if (str.EndsWith(" "))
+                                        {
+                                            toReturn += $"{str}";
+                                        }
+                                        else
+                                        {
+                                            toReturn += $"{str} ";
+                                        }
+                                    }
+                                }
+                            }
+                            else if (Type == "Single" && file.Split('\\').Last().Split('-')[0].Equals(State))
+                            {
+                                foreach (string line in File.ReadAllLines(file))
+                                {
+                                    if (line.Contains("provinces"))
+                                    {
+                                        string str = File.ReadAllLines(file)[File.ReadAllLines(file).ToList().IndexOf(line) + 1];
+                                        str = str.Trim('	'); //codding space
+                                        if (str.EndsWith(" "))
+                                        {
+                                            toReturn += $"{str}";
+                                        }
+                                        else
+                                        {
+                                            toReturn += $"{str} ";
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        List<string> ProvsA = new List<string>();
+                        ProvsA.AddRange(toReturn.Split(' '));
+                        List<string> ProvsB = new List<string>();
+                        foreach (string line in File.ReadAllLines(@"map\definition.csv"))
+                        {
+                            if (!line.Contains("unknown"))
+                            {
+                                ProvsB.Add(line.Split(';')[0]);
+                            }
+                        }
+                        if (ProvAction == "RemoveFromDef")
+                        {
+                            foreach (string str in ProvsB.ToArray())
+                            {
+                                if (ProvsA.Contains(str))
+                                {
+                                    ProvsB.Remove(str);
+                                }
+                            }
+                            toReturn = string.Join(" ", ProvsB);
+                        }
+
+                        Console.WriteLine($"[MAIN] returned: {toReturn}");
                     }
                     if (args[0].Equals("category"))
                     {
@@ -1812,7 +2153,12 @@ namespace HoI4MapCreatorTool
             {
                 Lines[Lines.ToList().IndexOf(Lines.Last())] += $" {toAdd}\n";
             }
-            File.WriteAllLines(locPath, Lines);
+
+            StreamReader sr = new StreamReader(locPath, true);
+            System.Text.Encoding encoding = sr.CurrentEncoding;
+            sr.Close();
+
+            File.WriteAllLines(locPath, Lines, encoding);
 
             //sw.WriteLine($"\n {StateName}:0 \"{LocName}\"");
             //sw.Flush();

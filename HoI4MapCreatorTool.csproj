@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{0B424DA9-B4B6-4228-B99A-E9823583D5E5}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>HoI4MapCreatorTool</RootNamespace>
-    <AssemblyName>HoI4MapCreatorTool</AssemblyName>
+    <RootNamespace>HoI4MapModdingTool</RootNamespace>
+    <AssemblyName>HoI4MapModdingTool</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
