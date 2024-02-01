@@ -2281,7 +2281,7 @@ namespace HoI4MapCreatorTool
                     valueChanged = true;
                     Console.WriteLine($"[RedactStateParameter] Found an replaced {param} value from {str3} to {value}");
                 }
-                if (!str.Contains(param) && b == a && !valueChanged)
+                else if (!str.Contains(param) && b == a && !valueChanged)
                 {
                     Console.WriteLine($"[RedactStateParameter] Couldn't find {param} parameter.");
                     foreach (string str1 in File.ReadAllLines(path))
@@ -2330,7 +2330,7 @@ namespace HoI4MapCreatorTool
                                 Console.WriteLine($"[CreateState] Cleared {province} entry at {FN}");
                             }
                         }
-                        if (str.Contains($" {province} "))
+                        else if (str.Contains($" {province} "))
                         {
                             if (File.ReadAllLines(file)[index - 1].Contains("provinces") || File.ReadAllLines(file)[index].Contains("provinces"))
                             {
@@ -2344,7 +2344,7 @@ namespace HoI4MapCreatorTool
                                 Console.WriteLine($"[CreateState] Cleared {province} entry at {FN}");
                             }
                         }
-                        if (str.Contains($" {province}") && lastIndex.Equals($"{province}"))
+                        else if (str.Contains($" {province}") && lastIndex.Equals($"{province}"))
                         {
                             if (File.ReadAllLines(file)[index - 1].Contains("provinces") || File.ReadAllLines(file)[index].Contains("provinces"))
                             {
