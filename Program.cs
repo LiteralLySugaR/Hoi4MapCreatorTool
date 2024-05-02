@@ -10,7 +10,7 @@ namespace HoI4MapCreatorTool
 {
     class Program
     {
-        public static string Version = "1.6.7";
+        public static string Version = "1.6.8";
         public static List<string> Entries = new List<string>
         {
             "add_core_of",
@@ -1602,7 +1602,7 @@ namespace HoI4MapCreatorTool
             string TargetFile = "";
             foreach (string file in Files)
             {
-                Console.WriteLine($"[ChangeStratRegion] Working with {file} . . .");
+                //Console.WriteLine($"[ChangeStratRegion] Working with {file} . . .");
                 if (file.Split('\\').Last().Split('-')[0].Equals(StrategicRegionID))
                 {
                     Console.WriteLine($"[ChangeStratRegion] Target file found.");
@@ -1617,12 +1617,12 @@ namespace HoI4MapCreatorTool
                         {
                             string str1 = lines[lines.ToList().IndexOf(line) + 1];
                             str1 = str1.Replace("	", string.Empty);
-                            string[] str2 = str1.Split(' ');
+                            string[] str2 = str1.Split(' ').Where(s => !string.IsNullOrWhiteSpace(s)).ToArray();
                             foreach (string str in str2)
                             {
                                 if (Provinces.Contains(str))
                                 {
-                                    Console.WriteLine($"[ChangeStratRegion] Spotted written province in {file.Split('\\').Last()}, writting changes. . .");
+                                    Console.WriteLine($"[ChangeStratRegion] Spotted written province ({str}) in {file.Split('\\').Last()}, writting changes. . .");
                                     provsTransfer.Add(str);
                                     string[] allLines = File.ReadAllLines(file);
                                     allLines[allLines.ToList().IndexOf(line) + 1] = allLines[allLines.ToList().IndexOf(line) + 1].Replace($" {str}", string.Empty);

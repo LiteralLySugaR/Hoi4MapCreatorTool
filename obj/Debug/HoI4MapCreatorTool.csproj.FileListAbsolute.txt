@@ -1,0 +1,7 @@
+G:\Scripting\CS\Hoi4MapCreatorTool\bin\Debug\HoI4MapModdingTool.exe.config
+G:\Scripting\CS\Hoi4MapCreatorTool\bin\Debug\HoI4MapModdingTool.exe
+G:\Scripting\CS\Hoi4MapCreatorTool\bin\Debug\HoI4MapModdingTool.pdb
+G:\Scripting\CS\Hoi4MapCreatorTool\obj\Debug\HoI4MapCreatorTool.csproj.AssemblyReference.cache
+G:\Scripting\CS\Hoi4MapCreatorTool\obj\Debug\HoI4MapCreatorTool.csproj.CoreCompileInputs.cache
+G:\Scripting\CS\Hoi4MapCreatorTool\obj\Debug\HoI4MapModdingTool.exe
+G:\Scripting\CS\Hoi4MapCreatorTool\obj\Debug\HoI4MapModdingTool.pdb
