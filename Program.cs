@@ -2523,7 +2523,7 @@ namespace HoI4MapCreatorTool
             else
             {
                 toReturn = "wasteland";
-                Console.WriteLine($"[ConvertToStringCategory] State Category Returned \"null\", proceeding with value of \"wasteland\".");
+                Console.WriteLine($"[ConvertToStringCategory] State Category returned \"null\", proceeding with value of \"wasteland\".");
             }
             return toReturn;
         }
@@ -2537,7 +2537,7 @@ namespace HoI4MapCreatorTool
             else
             {
                 toReturn = "aluminium";
-                Console.WriteLine($"[ConvertToStringResources] State Category Returned \"null\", proceeding with value of \"aluminium\".");
+                Console.WriteLine($"[ConvertToStringResources] Resource returned \"null\", proceeding with value of \"aluminium\".");
             }
             return toReturn;
         }
@@ -2554,7 +2554,7 @@ namespace HoI4MapCreatorTool
             "city",
             "large_city",
             "metropolis",
-            "megapolis"
+            "megalopolis"
         };
         public static List<string> Resources = new List<string>
         {
