@@ -10,7 +10,7 @@ namespace HoI4MapCreatorTool
 {
     class Program
     {
-        public static string Version = "1.6.8";
+        public static string Version = "1.6.9";
         public static List<string> Entries = new List<string>
         {
             "add_core_of",
@@ -1018,6 +1018,8 @@ namespace HoI4MapCreatorTool
                     "    > Show list of colours to use when making terrain input.\n\n" +
                     " - tohex [R-G-B]\n" +
                     "    > Convert RGB colour to HEX.\n\n" +
+                    " - set [coastal/terrainType/provinceType/continent] [value] [definitionFile] [province(s)]\n" +
+                    "    > Changes specified data of the province(s).\n\n" +
                     " - generateRGB\n" +
                     "    > Generate an RGB colour that is not used in definition.csv.\n\n" +
                     " - create [DefinitionFile] [R-G-B/HEX] [ProvinceType] [isCoastal] <continentType>\n" +
@@ -1031,6 +1033,36 @@ namespace HoI4MapCreatorTool
                     {
                         Console.WriteLine("This command requires province map (map/provinces.bmp), a Terrain Input File path and output file name. Optional you can set starting pixel to check from and last pixel position to check (\"-\" BETWEEN X AND Y IS REQUIRED), otherwise it will take longer to check since it will check EACH pixel. The Output file will ALWAYS be created as a .txt file.");
                     }
+                }
+            }
+            if (args[0].Equals("set"))
+            {
+                string[] data = new string[4] { "coastal", "terrainType", "provinceType", "continent" };
+
+                if (data.Contains(args[1]) && args.Length >= 5)
+                {
+                    string dataType = args[1];
+
+                    string dataValue = args[2];
+
+                    string dataDefinition = args[3];
+
+                    string[] provinces = args;
+
+                    provinces.ToList().RemoveRange(0, 4);
+
+                    if (File.Exists(dataDefinition))
+                    {
+                        SetProvinceDefinition(dataType, dataValue, dataDefinition, provinces);
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Definition file not found. Aborting.");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"Invalid second argument or missing argument!");
                 }
             }
             if (args[0].Equals("tohex") && args.Length >= 2)
@@ -1162,6 +1194,67 @@ namespace HoI4MapCreatorTool
             Thread.Sleep(1000);
             Console.WriteLine(" ");
             ProvinceDefinition();
+        }
+        public static void SetProvinceDefinition(string dataType, string dataValue, string definitionFile, string[] provinces)
+        {
+            //id;R;G;B;terrainType;coastal;provinceType;continent
+            //terrainTypes: land, sea, lake
+            //provinceTypes: unknown, plains, hills, mountain, jungle, forest, desert, marsh, urban, lakes, ocean
+
+            int changeIndex = 0;
+
+            if (dataType == "coastal")
+            {changeIndex = 5; }
+            else if (dataType == "terrainType")
+            { changeIndex = 4; }
+            else if (dataType == "provinceType")
+            { changeIndex = 6; }
+            else if (dataType == "continent")
+            { changeIndex = 7; }
+
+            string[] lines = File.ReadAllLines(definitionFile);
+
+            int hits = 0;
+
+            for (int i = 0; i < lines.Length; i++)
+            {
+                string provID = lines[i].Split(';')[0];
+
+                if (provinces.Contains(provID))
+                {
+                    string[] defLine = lines[i].Split(';');
+
+                    defLine[changeIndex] = dataValue;
+
+                    if (dataType == "terrainType" && dataValue == "land")
+                    {
+                        defLine[6] = "plains";
+                    }
+                    else if (dataType == "terrainType" && dataValue == "sea")
+                    {
+                        defLine[6] = "ocean";
+                    }
+                    else if (dataType == "terrainType" && dataValue == "lake")
+                    {
+                        defLine[6] = "lakes";
+                    }
+
+                    lines[i] = string.Join(";", defLine);
+
+                    Console.WriteLine($"[SetProvinceDefinition] Hit at line {i}, province {provID}");
+
+                    hits++;
+                }
+
+                if (hits == provinces.Length)
+                {
+                    Console.WriteLine($"[SetProvinceDefinition] Writing changes. . .");
+
+                    File.WriteAllLines(definitionFile, lines);
+
+                    break;
+                }
+            }
         }
         public static string[] HexToStringRGB(string Hex)
         {
@@ -1665,7 +1758,7 @@ namespace HoI4MapCreatorTool
                     }
                     if (menuType != 1)
                     {
-                        Console.WriteLine($"===== MAIN | STATES MANIPULATION TOOL (v{Version} by July) =====");
+                        Console.WriteLine($"===== MAIN | STATES MANIPULATION TOOL (v{Version} by Arxy) =====");
                         menuType = 1;
                     }
                     Console.Write("State: ");
