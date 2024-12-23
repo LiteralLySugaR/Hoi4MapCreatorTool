@@ -10,7 +10,7 @@ namespace HoI4MapCreatorTool
 {
     class Program
     {
-        public static string Version = "1.6.9";
+        public static string Version = "1.6.9f1";
         public static List<string> Entries = new List<string>
         {
             "add_core_of",
@@ -1018,7 +1018,7 @@ namespace HoI4MapCreatorTool
                     "    > Show list of colours to use when making terrain input.\n\n" +
                     " - tohex [R-G-B]\n" +
                     "    > Convert RGB colour to HEX.\n\n" +
-                    " - set [coastal/terrainType/provinceType/continent] [value] [definitionFile] [province(s)]\n" +
+                    " - set [coastal/terrain/province/continent] [value] [definitionFile] [province(s)]\n" +
                     "    > Changes specified data of the province(s).\n\n" +
                     " - generateRGB\n" +
                     "    > Generate an RGB colour that is not used in definition.csv.\n\n" +
@@ -1037,7 +1037,7 @@ namespace HoI4MapCreatorTool
             }
             if (args[0].Equals("set"))
             {
-                string[] data = new string[4] { "coastal", "terrainType", "provinceType", "continent" };
+                string[] data = new string[4] { "coastal", "terrain", "province", "continent" };
 
                 if (data.Contains(args[1]) && args.Length >= 5)
                 {
@@ -1047,9 +1047,14 @@ namespace HoI4MapCreatorTool
 
                     string dataDefinition = args[3];
 
-                    string[] provinces = args;
+                    string[] provincesRaw = args;
 
-                    provinces.ToList().RemoveRange(0, 4);
+                    for (int i = 0; i <= 3; i++)
+                    {
+                        provincesRaw[i] = "";
+                    }
+
+                    string[] provinces = provincesRaw.Where(s => !string.IsNullOrEmpty(s)).ToArray();
 
                     if (File.Exists(dataDefinition))
                     {
@@ -1201,16 +1206,14 @@ namespace HoI4MapCreatorTool
             //terrainTypes: land, sea, lake
             //provinceTypes: unknown, plains, hills, mountain, jungle, forest, desert, marsh, urban, lakes, ocean
 
-            int changeIndex = 0;
+            int changeIndex = 7;
 
             if (dataType == "coastal")
             {changeIndex = 5; }
-            else if (dataType == "terrainType")
+            else if (dataType == "terrain")
             { changeIndex = 4; }
-            else if (dataType == "provinceType")
+            else if (dataType == "province")
             { changeIndex = 6; }
-            else if (dataType == "continent")
-            { changeIndex = 7; }
 
             string[] lines = File.ReadAllLines(definitionFile);
 
@@ -1222,26 +1225,36 @@ namespace HoI4MapCreatorTool
 
                 if (provinces.Contains(provID))
                 {
+                    Console.WriteLine($"[SetProvinceDefinition] Hit at line {i + 1}, province {provID}");
+
                     string[] defLine = lines[i].Split(';');
+
+                    Console.WriteLine($"[SetProvinceDefinition] Writing {dataType}: {defLine[changeIndex]} > {dataValue}");
 
                     defLine[changeIndex] = dataValue;
 
-                    if (dataType == "terrainType" && dataValue == "land")
+                    if (dataType == "terrain" && dataValue == "land")
                     {
                         defLine[6] = "plains";
+
+                        Console.WriteLine($"[SetProvinceDefinition] Fixing terrain type with province type \"plains\"");
                     }
-                    else if (dataType == "terrainType" && dataValue == "sea")
+                    else if (dataType == "terrain" && dataValue == "sea")
                     {
                         defLine[6] = "ocean";
+
+                        Console.WriteLine($"[SetProvinceDefinition] Fixing terrain type with province type \"ocean\"");
                     }
-                    else if (dataType == "terrainType" && dataValue == "lake")
+                    else if (dataType == "terrain" && dataValue == "lake")
                     {
                         defLine[6] = "lakes";
+
+                        Console.WriteLine($"[SetProvinceDefinition] Fixing terrain type with province type \"lakes\"");
                     }
 
-                    lines[i] = string.Join(";", defLine);
+                    string newLine = string.Join(";", defLine);
 
-                    Console.WriteLine($"[SetProvinceDefinition] Hit at line {i}, province {provID}");
+                    lines[i] = newLine;
 
                     hits++;
                 }
